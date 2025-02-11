@@ -107,7 +107,6 @@ public class BattleSystem : MonoBehaviour
             return;
         
         _screenCenterText.enabled = false;
-        
         isTimer = false;
     }
 
