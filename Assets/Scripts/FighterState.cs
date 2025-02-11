@@ -6,6 +6,7 @@
     Attacked,
     Defense,
     Evade,
+    Charge,
     Win,
     Lose
 }

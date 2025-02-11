@@ -12,7 +12,13 @@ public class FighterData : ScriptableObject
     [Space] 
     public int LightAttackDamage;
     public int LightAttackEnergyCost;
-
+    [Space] 
+    public int HeavyAttackDamage;
+    public int HeavyAttackEnergyCost;
+    public float HeavyAttackChargeTime;
+    public float ChargeEnergyCost;//per second
+    [Space] 
+    public int EvadeEnergyCost;
     [Space] 
     public List<FighterStateData> stateData;
 }

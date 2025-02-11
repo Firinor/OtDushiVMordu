@@ -18,9 +18,9 @@ public class DangerLineSystem : MonoBehaviour
     [SerializeField]
     private Fighter _opponent;
 
-    private Action OnPlayerHit;
+    private Func<bool> OnPlayerHit;
     
-    public void Initialize(Action OnPlayerHit)
+    public void Initialize(Func<bool> OnPlayerHit)
     {
         this.OnPlayerHit += OnPlayerHit;
         for (int i = 0; i < hitPool.childCount; i++)
@@ -46,22 +46,22 @@ public class DangerLineSystem : MonoBehaviour
             RectTransform newObj = Instantiate(hitWarningViewPrefab, hitPool).GetComponent<RectTransform>();
             result = new HitWarning(newObj);
             hitWarnings.Add(result);
-            result.OnActivation += HitPlayer;
+            result.TryHitOpponent += HitPlayer;
         }
         result.Initialize(hitConfig);
         result.Transform.gameObject.SetActive(true);
     }
 
-    private void HitPlayer()
+    private bool HitPlayer()
     {
-        OnPlayerHit?.Invoke();
+        return OnPlayerHit.Invoke();
     }
 
     private void OnDestroy()
     {
         foreach (var hitWarning in hitWarnings)
         {
-            hitWarning.OnActivation -= HitPlayer;
+            hitWarning.TryHitOpponent -= HitPlayer;
         }
     }
 }

@@ -5,13 +5,13 @@ public class HitWarning
 {
     private bool isActive;
     public RectTransform Transform;
-    private int damage;
     private float currentLifeTime;
     
     private float activationXPoint;
     private float disableXPoint;
 
-    public Action OnActivation;
+    public Func<bool> TryHitOpponent;
+    
     private float X => Transform.anchoredPosition.x;
 
     public HitWarning(RectTransform transform)
@@ -39,14 +39,20 @@ public class HitWarning
 
         if (isActive && X < activationXPoint)
         {
-            OnActivation?.Invoke();
             isActive = false;
+            if(!TryHitOpponent.Invoke())
+                ToDisable();
         }
 
         if (X < disableXPoint)
         {
-            Transform.gameObject.SetActive(false);
+            ToDisable();
         }
         currentLifeTime -= Time.deltaTime;
+    }
+
+    private void ToDisable()
+    {
+        Transform.gameObject.SetActive(false);
     }
 }

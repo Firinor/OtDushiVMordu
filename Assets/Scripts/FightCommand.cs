@@ -1,6 +1,7 @@
 ﻿public enum FightCommand
 {
+    Charge,
     Attack,
     Defence,
-    Dodge,
+    Evade,
 }

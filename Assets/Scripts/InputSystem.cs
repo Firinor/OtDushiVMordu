@@ -9,11 +9,19 @@ public class InputSystem : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            commands.Enqueue(FightCommand.Charge);
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
             commands.Enqueue(FightCommand.Attack);
         }
         if (Input.GetMouseButtonDown(1))
         {
             commands.Enqueue(FightCommand.Defence);
+        }
+        if (Input.GetMouseButtonDown(2))
+        {
+            commands.Enqueue(FightCommand.Evade);
         }
     }
 }

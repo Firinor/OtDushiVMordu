@@ -7,6 +7,7 @@ public class Fighter : MonoBehaviour
 {
     public Slider HPSlider;
     public Slider EPSlider;
+    public ChargeBar ChargeBar;
     public Image FighterImage;
 
     private FighterModel _model;
@@ -15,6 +16,8 @@ public class Fighter : MonoBehaviour
 
     private float timer;
     private bool isTimer;
+
+    public bool IsOnChargeState => _model.state == FighterState.Charge;
     
     public void Initialize(FighterModel model)
     {
@@ -28,7 +31,12 @@ public class Fighter : MonoBehaviour
         EPSlider.maxValue = model.data.EnergyPoints;
         model.OnEPChange += ChangeEP;
         ChangeEP(model.data.EnergyPoints);
-        //model.OnAttack += OnLightAttack;
+
+        if (ChargeBar != null)
+        {
+            ChargeBar.Slider.maxValue = model.data.HeavyAttackChargeTime;
+            model.OnChargeChange += ChargeBar.ChengeCharge;
+        }
     }
 
     private void GenerateStates()
@@ -42,47 +50,139 @@ public class Fighter : MonoBehaviour
 
     private void Update()
     {
-        _model.CurrentEnergyPoints += _model.data.EnergyRegen * Time.deltaTime;
-        _model.OnEPChange?.Invoke(_model.CurrentEnergyPoints);
+        EnergyRegenTick();
+        Charge();
+        StateTimerTick();
+    }
 
-        if(!isTimer)
+    private void Charge()
+    {
+        if (_model.state != FighterState.Charge)
+        {
+            ResetCharge();
+            _model.OnChargeChange?.Invoke(_model.CurrentChargeTime);
+            return;
+        }
+        
+        _model.CurrentChargeTime += Time.deltaTime;
+        bool isChargeFailed = !TrySpendEnergy(_model.data.ChargeEnergyCost * Time.deltaTime);
+
+        if (isChargeFailed)
+        {
+            ToIdleState();
+            ResetCharge();   
+        }
+        
+        _model.OnChargeChange?.Invoke(_model.CurrentChargeTime);
+    }
+
+    public void ResetCharge()
+    {
+        _model.CurrentChargeTime = 0;
+    }
+
+    private void EnergyRegenTick()
+    {
+        bool isInRegenState = 
+            _model.state == FighterState.Idle 
+            ||  _model.state == FighterState.NoEnergy;
+        
+        if(!isInRegenState)
+            return;
+        
+        if (_model.CurrentEnergyPoints >= _model.data.EnergyPoints)
+            return;
+        
+        _model.CurrentEnergyPoints += _model.data.EnergyRegen * Time.deltaTime;
+        if(_model.state == FighterState.NoEnergy)
+            ToIdleState();
+        
+        _model.CurrentEnergyPoints = Math.Min(_model.CurrentEnergyPoints, _model.data.EnergyPoints);
+        _model.OnEPChange?.Invoke(_model.CurrentEnergyPoints);
+    }
+
+    private void StateTimerTick()
+    {
+        if (!isTimer)
             return;
         
         timer -= Time.deltaTime;
-        if (timer <= 0)
-        {
-            ChangeState(FighterState.Idle);
-            isTimer = false;
-        }
+        if (timer > 0)
+            return;
+        
+        ToIdleState();
+        
+        isTimer = false;
     }
 
-    public bool TrySpendEnergy()
+    private void ToIdleState()
     {
-        bool result;
+        if (_model.CurrentEnergyPoints >= _model.data.LightAttackEnergyCost)
+            ChangeState(FighterState.Idle);
+        else
+            ChangeState(FighterState.NoEnergy);
+    }
+    
+    public bool TrySpendEnergy(float energyCount)
+    {
+        _model.CurrentEnergyPoints -= energyCount;
         
-        _model.CurrentEnergyPoints -= _model.data.LightAttackEnergyCost;
-        
-        result = _model.CurrentEnergyPoints >= 0;
-
-        ChangeState(result ? FighterState.Attack : FighterState.NoEnergy);
+        bool result = _model.CurrentEnergyPoints >= 0;
 
         _model.CurrentEnergyPoints = Math.Max(_model.CurrentEnergyPoints, 0);
         _model.OnEPChange?.Invoke(_model.CurrentEnergyPoints);
         
         return result;
     }
+    public AttackData TryAttack()
+    {
+        if (_model.CurrentChargeTime >= _model.data.HeavyAttackChargeTime
+            && _model.CurrentEnergyPoints >= _model.data.HeavyAttackEnergyCost)
+        {
+            TrySpendEnergy(_model.data.HeavyAttackEnergyCost);
+            ChangeState(FighterState.Attack);
+            return new AttackData{Damage = _model.data.HeavyAttackDamage, IsHeavy = true};
+        }
 
+        if (TrySpendEnergy(_model.data.LightAttackEnergyCost))
+        {
+            ChangeState(FighterState.Attack);
+            return new AttackData{Damage = _model.data.LightAttackDamage, IsHeavy = false};
+        }
+
+        ChangeState(FighterState.NoEnergy);
+        return default;
+    }
     private void ChangeState(FighterState newState)
     {
+        //Debug.Log("STATE : " + newState);
         _model.state = newState;
         FighterImage.sprite = _states[newState].Sprites[0];
-        isTimer = true;
-        timer = _states[newState].Time;
+
+        if (_states[newState].Time > 0)
+        {
+            isTimer = true;
+            timer = _states[newState].Time;
+        }
+        else
+        {
+            isTimer = false;
+        }
     }
 
-    public void TakeHit(int damage)
+    public bool TakeHit(AttackData attack)
     {
-        _model.CurrentHitPoints -= damage;
+        ResetCharge();
+        
+        bool isInSaveState = _model.state == FighterState.Evade;
+        if(isInSaveState)
+            return false;
+        
+        isInSaveState = _model.state == FighterState.Defense && !attack.IsHeavy;
+        if(isInSaveState)
+            return false;
+        
+        _model.CurrentHitPoints -= attack.Damage;
         _model.CurrentHitPoints = Mathf.Max(_model.CurrentHitPoints, 0);
         _model.OnHPChange.Invoke(_model.CurrentHitPoints);
         if (_model.CurrentHitPoints <= 0)
@@ -94,15 +194,30 @@ public class Fighter : MonoBehaviour
         {
             ChangeState(FighterState.Attacked);
         }
+        return true;
     }
     public void ToDefence()
     {
         ChangeState(FighterState.Defense);
     }
-    private void OnEvade()
+    public void ToEvade()
     {
-        ChangeState(FighterState.Evade);
+        if (TrySpendEnergy(_model.data.EvadeEnergyCost))
+        {
+            ChangeState(FighterState.Evade);
+            return;
+        }
+
+        ChangeState(FighterState.NoEnergy);
     }
+    public void ToCharge()
+    {
+        if(_model.CurrentEnergyPoints >= _model.data.LightAttackEnergyCost)
+            ChangeState(FighterState.Charge);
+        else
+            ChangeState(FighterState.NoEnergy);
+    }
+
 
     private void ChangeEP(float points)
     {
@@ -117,6 +232,9 @@ public class Fighter : MonoBehaviour
     {
         _model.OnHPChange -= ChangeHP;
         _model.OnEPChange -= ChangeEP;
-        //_model.OnAttack -= OnLightAttack;
+        if (ChargeBar != null)
+        {
+            _model.OnChargeChange -= ChargeBar.ChengeCharge;
+        }
     }
 }

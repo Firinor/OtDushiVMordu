@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,14 @@ public class BattleSystem : MonoBehaviour
     private Fighter _player;
     [SerializeField]
     private Fighter _opponent;
+
+    [SerializeField] 
+    private TextMeshProUGUI _screenCenterText;
+    [SerializeField] 
+    private TextWarningConfig _textWarningConfig;
+    
+    private float timer;
+    private bool isTimer;
 
     //bootstrap
     private void Awake()
@@ -49,36 +58,80 @@ public class BattleSystem : MonoBehaviour
             var command = _commands.Dequeue();
             switch (command)
             {
+                case FightCommand.Charge:
+                    _player.ToCharge();
+                    break;
                 case FightCommand.Attack:
-                    if(_player.TrySpendEnergy())
-                        HitOpponent();
+                    if(!_player.IsOnChargeState)
+                        break;
+                    
+                    AttackData playerAttack = _player.TryAttack();
+                    if (playerAttack.Damage > 0)
+                        HitFighter(_opponent, playerAttack);
+                    else
+                        ShowWarningText();
+                    _player.ResetCharge();
                     break;
                 case FightCommand.Defence:
                     _player.ToDefence();
+                    _player.ResetCharge();
+                    break;
+                case FightCommand.Evade:
+                    _player.ToEvade();
+                    _player.ResetCharge();
                     break;
                 default:
                     throw new Exception();
             }
-            Debug.Log("Fight command : " + command);
+            //Debug.Log("Fight command : " + command);
         }
+        
+        TimerTick();
     }
 
-    private void HitOpponent()
+    private void ShowWarningText()
     {
-        _opponent.TakeHit(_player.LightHitDamage);
-    }
-    
-    private void HitPlayer()
-    {
-        _player.TakeHit(_opponent.LightHitDamage);
+        _screenCenterText.text = _textWarningConfig.WarningText;
+        _screenCenterText.enabled = true;
+        isTimer = true;
+        timer = _textWarningConfig.LifeTime;
     }
 
+    private void TimerTick()
+    {
+        if (!isTimer)
+            return;
+        
+        timer -= Time.deltaTime;
+        if (timer > 0)
+            return;
+        
+        _screenCenterText.enabled = false;
+        
+        isTimer = false;
+    }
+
+    private void HitFighter(Fighter target, AttackData attack)
+    {
+        target.TakeHit(attack);
+    }
+    private bool HitPlayer()
+    {
+        AttackData opponentAttack = _opponent.TryAttack();
+        if (opponentAttack.Damage > 0)
+        {
+            HitFighter(_player, opponentAttack);
+            return true;
+        }
+
+        return false;
+    }
     private IEnumerator OpponentAI()
     {
         while (true)
         {
             _dangerLineSystem.AddOpponentAttack();    
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(5f);
         }
     }
     
