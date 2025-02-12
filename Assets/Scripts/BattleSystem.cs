@@ -38,7 +38,6 @@ public class BattleSystem : MonoBehaviour
         var opponent = Resources.Load<FighterData>("Fighters/Koshey");
         InputSystem playerInput = GameObject.Find("InputSystem").GetComponent<InputSystem>();
         _dangerLineSystem.Initialize();
-        _opponentAI = new OpponentAI(this, _dangerLineSystem, _opponent, _player);
         StartNewBattle(player, playerInput, opponent);
     }
 
@@ -47,10 +46,12 @@ public class BattleSystem : MonoBehaviour
         _commands = playerInput.commands;
         FighterModel playerModel = new FighterModel(player);
         FighterModel opponentModel = new FighterModel(opponent);
+        
         _player.Initialize(playerModel);
         _opponent.Initialize(opponentModel);
-
+        _opponentAI = new OpponentAI(this, _dangerLineSystem, _opponent, _player);
         _AIRoutine = StartCoroutine(_opponentAI.Start());
+        
         IsBattleRunning = true;
     }
 

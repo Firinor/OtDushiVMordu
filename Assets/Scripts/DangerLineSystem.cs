@@ -7,6 +7,8 @@ public class DangerLineSystem : MonoBehaviour
 {
     [SerializeField]
     private HitWarningConfig hitConfig;
+    public float warningTime => hitConfig.LifeTime;
+    
     [SerializeField]
     private WarningSpritesConfig hitSpritesConfig;
     [SerializeField]

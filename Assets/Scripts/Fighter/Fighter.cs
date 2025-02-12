@@ -12,14 +12,15 @@ public class Fighter : MonoBehaviour
 
     private FighterModel _model;
     private Dictionary<FighterState, FighterStateData> _states;
-    public int LightHitDamage => _model.data.LightAttackDamage;
 
     private float timer;
     private bool isTimer;
 
-    public float ChargeTime => _model.data.HeavyAttackChargeTime;
+    public float HeavyAttackChargeTime => _model.data.HeavyAttackChargeTime;
 
     public bool IsOnChargeState => _model.state == FighterState.Charge;
+    public float ChargeValue => _model.CurrentChargeTime;
+    public float EvadeTime => _model.data.stateData.Find(x => x.State == FighterState.Evade).Time;
     
     public void Initialize(FighterModel model)
     {
