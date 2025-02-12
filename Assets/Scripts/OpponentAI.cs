@@ -84,8 +84,7 @@ public class OpponentAI
     {
         if (attack.Damage > 0)
         {
-            _battleSystem.HitFighter(_opponent, attack);
-            return true;
+            return _opponent.TakeHit(attack);
         }
 
         return false;

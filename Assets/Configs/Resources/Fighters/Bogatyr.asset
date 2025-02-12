@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bogatyr
   m_EditorClassIdentifier: 
   Name: "\u0411\u043E\u0433\u0430\u0442\u044B\u0440\u044C"
-  HitPoints: 150
+  HitPoints: 1
   EnergyPoints: 30
   EnergyRegen: 10
   LightAttackDamage: 1
@@ -52,3 +52,11 @@ MonoBehaviour:
     Sprites:
     - {fileID: 21300000, guid: 6caa9b071713f1143bbdbbfeed2941d9, type: 3}
     Time: 0.6
+  - State: 7
+    Sprites:
+    - {fileID: 21300000, guid: 12a00ac4b00eb054c8ae8765332d6b9f, type: 3}
+    Time: 0
+  - State: 8
+    Sprites:
+    - {fileID: 21300000, guid: 1a648cce575982f419a619481f03a828, type: 3}
+    Time: 0

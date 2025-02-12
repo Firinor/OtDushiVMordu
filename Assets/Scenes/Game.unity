@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 726650}
   - component: {fileID: 726651}
   m_Layer: 0
-  m_Name: DangetLineSystem
+  m_Name: DangerLineSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1758,14 +1758,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa1d023648fa433d8cfc8028b4230a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsBattleRunning: 0
   WinPoints:
   - {fileID: 1433669979}
   - {fileID: 1776478930}
   - {fileID: 1127964058}
   - {fileID: 510969689}
   - {fileID: 1410143467}
-  _dangerLineSystem: {fileID: 726651}
   _player: {fileID: 2025497483}
   _opponent: {fileID: 238070130}
   _screenCenterText: {fileID: 1262654343}

@@ -2,65 +2,58 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class BattleSystem : MonoBehaviour
+public class InBattle : BattleState
 {
-    public bool IsBattleRunning;
-    
-    [SerializeField]
-    private Image[] WinPoints;
-
-    [SerializeField] 
-    private DangerLineSystem _dangerLineSystem;
-    
+    private readonly BattleSystem _battleSystem;
     private OpponentAI _opponentAI;
-    private Coroutine _AIRoutine;
     
-    private Queue<FightCommand> _commands;
-    [SerializeField]
-    private Fighter _player;
-    [SerializeField]
-    private Fighter _opponent;
-
-    [SerializeField] 
+    private DangerLineSystem _dangerLineSystem;
+    private readonly Queue<FightCommand> _commands;
+    
+    private readonly Fighter _player;
+    private readonly Fighter _opponent;
+    
     private TextMeshProUGUI _screenCenterText;
-    [SerializeField] 
     private TextWarningConfig _textWarningConfig;
     
     private float timer;
     private bool isTimer;
 
-    //bootstrap
-    private void Awake()
+    public InBattle(InBattleParams @params)
     {
-        var player = Resources.Load<FighterData>("Fighters/Bogatyr");
-        var opponent = Resources.Load<FighterData>("Fighters/Koshey");
-        InputSystem playerInput = GameObject.Find("InputSystem").GetComponent<InputSystem>();
-        _dangerLineSystem.Initialize();
-        StartNewBattle(player, playerInput, opponent);
-    }
+        _battleSystem = @params.BattleSystem;
+        _dangerLineSystem = @params.DangerLineSystem;
+        _player = @params.Player;
+        _opponent = @params.Opponent;
+        _commands = @params.PlayerInput.commands;
+        
+        FighterModel playerModel = new FighterModel(@params.PlayerData);
+        FighterModel opponentModel = new FighterModel(@params.OpponentData);
 
-    public void StartNewBattle(FighterData player, InputSystem playerInput, FighterData opponent)
-    {
-        _commands = playerInput.commands;
-        FighterModel playerModel = new FighterModel(player);
-        FighterModel opponentModel = new FighterModel(opponent);
+        _screenCenterText = @params.ScreenCenterText;
+        _textWarningConfig = @params.TextWarningConfig;
         
         _player.Initialize(playerModel);
         _opponent.Initialize(opponentModel);
-        _opponentAI = new OpponentAI(this, _dangerLineSystem, _opponent, _player);
-        _AIRoutine = StartCoroutine(_opponentAI.Start());
-        
-        IsBattleRunning = true;
     }
-
-    private void Update()
+    
+    public override void OnEnter()
+    {
+        _dangerLineSystem.Initialize();
+        _opponentAI = new OpponentAI(_battleSystem, _dangerLineSystem, _opponent, _player);
+        _battleSystem.StartCoroutine(_opponentAI.Start());
+    }
+    public override void Update()
     {
         CommandProcessing();
         TimerTick();
     }
-
+    public override void OnExit()
+    {  
+        _battleSystem.StopAllCoroutines();
+    }
+    
     private void CommandProcessing()
     {
         if (_commands.Count <= 0)
@@ -77,7 +70,7 @@ public class BattleSystem : MonoBehaviour
                     break;
                 AttackData playerAttack = _player.TryAttack();
                 if (playerAttack.Damage > 0)
-                    HitFighter(_opponent, playerAttack);
+                    _opponent.TakeHit(playerAttack);
                 else
                     ShowWarningText();
                 _player.ResetCharge();
@@ -112,15 +105,5 @@ public class BattleSystem : MonoBehaviour
         
         _screenCenterText.enabled = false;
         isTimer = false;
-    }
-
-    public void HitFighter(Fighter target, AttackData attack)
-    {
-        target.TakeHit(attack);
-    }
- 
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
     }
 }
