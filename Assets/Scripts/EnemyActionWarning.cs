@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net.Mime;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class HitWarning
+public class EnemyActionWarning: IDisposable
 {
     private bool isActive;
     public RectTransform Transform;
@@ -10,22 +12,27 @@ public class HitWarning
     private float activationXPoint;
     private float disableXPoint;
 
-    public Func<bool> TryHitOpponent;
+    private Func<bool> TryUseAction;
+
+    private AttackData _attackData;
     
     private float X => Transform.anchoredPosition.x;
 
-    public HitWarning(RectTransform transform)
+    public EnemyActionWarning(RectTransform transform)
     {
         Transform = transform;
     }
     
-    public void Initialize(HitWarningConfig hitConfig)
+    public void Initialize(HitWarningConfig hitConfig, Sprite sprite, Func<bool> action)
     {
         Transform.anchoredPosition = new Vector2(hitConfig.StartXPosition, 0f);
         currentLifeTime = hitConfig.LifeTime;
         activationXPoint = hitConfig.ActionXPosition;
         disableXPoint = hitConfig.EndXPosition;
-        
+
+        Transform.GetComponent<Image>().sprite = sprite;
+
+        TryUseAction = action;
         isActive = true;
     }
 
@@ -40,7 +47,7 @@ public class HitWarning
         if (isActive && X < activationXPoint)
         {
             isActive = false;
-            if(!TryHitOpponent.Invoke())
+            if(!TryUseAction.Invoke())
                 ToDisable();
         }
 
@@ -53,6 +60,12 @@ public class HitWarning
 
     private void ToDisable()
     {
+        TryUseAction = null;
         Transform.gameObject.SetActive(false);
+    }
+
+    public void Dispose()
+    {
+        ToDisable();
     }
 }

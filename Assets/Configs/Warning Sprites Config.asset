@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9372a121eb945cda9f735af222ec1af, type: 3}
+  m_Name: Warning Sprites Config
+  m_EditorClassIdentifier: 
+  LightAttack: {fileID: 21300000, guid: fa25a708bf1a58a49b8a248cc6cbeb66, type: 3}
+  HeavyAttack: {fileID: 21300000, guid: c5bd568f200ccd24fa0f4b61c63573e8, type: 3}
+  Defence: {fileID: 21300000, guid: f987ffbff93cf1e4b910aaf7c098f788, type: 3}
+  Evade: {fileID: 21300000, guid: 3b9a880931e390a469f95de22bef24a3, type: 3}

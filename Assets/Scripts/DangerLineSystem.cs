@@ -8,8 +8,10 @@ public class DangerLineSystem : MonoBehaviour
     [SerializeField]
     private HitWarningConfig hitConfig;
     [SerializeField]
+    private WarningSpritesConfig hitSpritesConfig;
+    [SerializeField]
     private RectTransform hitPool;
-    private List<HitWarning> hitWarnings = new ();
+    private List<EnemyActionWarning> enemyWarnings = new ();
     [SerializeField]
     private GameObject hitWarningViewPrefab;
 
@@ -20,9 +22,8 @@ public class DangerLineSystem : MonoBehaviour
 
     private Func<bool> OnPlayerHit;
     
-    public void Initialize(Func<bool> OnPlayerHit)
+    public void Initialize()
     {
-        this.OnPlayerHit += OnPlayerHit;
         for (int i = 0; i < hitPool.childCount; i++)
         {
             Destroy(hitPool.GetChild(i).gameObject); 
@@ -31,37 +32,44 @@ public class DangerLineSystem : MonoBehaviour
     
     private void Update()
     {
-        IEnumerable<HitWarning> activeHits = hitWarnings.Where(a => a.Transform.gameObject.activeSelf);
-        foreach (var hitWarning in activeHits)
+        IEnumerable<EnemyActionWarning> activeWarnings = enemyWarnings.Where(a => a.Transform.gameObject.activeSelf);
+        foreach (var hitWarning in activeWarnings)
         {
             hitWarning.Update();
         }
     }
     
-    public void AddOpponentAttack()
+    public void AddOpponentAction(FightCommand command, Func<bool> onActivateFunc)
     {
-        var result = hitWarnings.Find(a => a.Transform.gameObject.activeSelf == false);
+        var result = enemyWarnings.Find(a => a.Transform.gameObject.activeSelf == false);
         if (result == null)
         {
             RectTransform newObj = Instantiate(hitWarningViewPrefab, hitPool).GetComponent<RectTransform>();
-            result = new HitWarning(newObj);
-            hitWarnings.Add(result);
-            result.TryHitOpponent += HitPlayer;
+            result = new EnemyActionWarning(newObj);
+            enemyWarnings.Add(result);
         }
-        result.Initialize(hitConfig);
+
+        Sprite icon = GetSprite(command);
+        
+        result.Initialize(hitConfig, icon, onActivateFunc);
         result.Transform.gameObject.SetActive(true);
     }
 
-    private bool HitPlayer()
+    private Sprite GetSprite(FightCommand command) 
+        => command switch
     {
-        return OnPlayerHit.Invoke();
-    }
+        FightCommand.Attack => hitSpritesConfig.LightAttack,
+        FightCommand.Charge => hitSpritesConfig.HeavyAttack,
+        FightCommand.Defence => hitSpritesConfig.Defence,
+        FightCommand.Evade => hitSpritesConfig.Evade,
+        _ => throw new Exception()
+    };
 
     private void OnDestroy()
     {
-        foreach (var hitWarning in hitWarnings)
+        foreach (var hitWarning in enemyWarnings)
         {
-            hitWarning.TryHitOpponent -= HitPlayer;
+            hitWarning.Dispose();
         }
     }
 }

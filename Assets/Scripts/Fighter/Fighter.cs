@@ -17,6 +17,8 @@ public class Fighter : MonoBehaviour
     private float timer;
     private bool isTimer;
 
+    public float ChargeTime => _model.data.HeavyAttackChargeTime;
+
     public bool IsOnChargeState => _model.state == FighterState.Charge;
     
     public void Initialize(FighterModel model)
@@ -200,15 +202,16 @@ public class Fighter : MonoBehaviour
     {
         ChangeState(FighterState.Defense);
     }
-    public void ToEvade()
+    public bool TryEvade()
     {
         if (TrySpendEnergy(_model.data.EvadeEnergyCost))
         {
             ChangeState(FighterState.Evade);
-            return;
+            return true;
         }
 
         ChangeState(FighterState.NoEnergy);
+        return false;
     }
     public void ToCharge()
     {

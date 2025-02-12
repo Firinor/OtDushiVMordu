@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,6 +13,9 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] 
     private DangerLineSystem _dangerLineSystem;
+    
+    private OpponentAI _opponentAI;
+    private Coroutine _AIRoutine;
     
     private Queue<FightCommand> _commands;
     [SerializeField]
@@ -35,7 +37,8 @@ public class BattleSystem : MonoBehaviour
         var player = Resources.Load<FighterData>("Fighters/Bogatyr");
         var opponent = Resources.Load<FighterData>("Fighters/Koshey");
         InputSystem playerInput = GameObject.Find("InputSystem").GetComponent<InputSystem>();
-        _dangerLineSystem.Initialize(HitPlayer);
+        _dangerLineSystem.Initialize();
+        _opponentAI = new OpponentAI(this, _dangerLineSystem, _opponent, _player);
         StartNewBattle(player, playerInput, opponent);
     }
 
@@ -46,49 +49,50 @@ public class BattleSystem : MonoBehaviour
         FighterModel opponentModel = new FighterModel(opponent);
         _player.Initialize(playerModel);
         _opponent.Initialize(opponentModel);
-        
-        StartCoroutine(OpponentAI());
+
+        _AIRoutine = StartCoroutine(_opponentAI.Start());
         IsBattleRunning = true;
     }
 
     private void Update()
     {
-        if (_commands.Count > 0)
-        {
-            var command = _commands.Dequeue();
-            switch (command)
-            {
-                case FightCommand.Charge:
-                    _player.ToCharge();
-                    break;
-                case FightCommand.Attack:
-                    if(!_player.IsOnChargeState)
-                        break;
-                    
-                    AttackData playerAttack = _player.TryAttack();
-                    if (playerAttack.Damage > 0)
-                        HitFighter(_opponent, playerAttack);
-                    else
-                        ShowWarningText();
-                    _player.ResetCharge();
-                    break;
-                case FightCommand.Defence:
-                    _player.ToDefence();
-                    _player.ResetCharge();
-                    break;
-                case FightCommand.Evade:
-                    _player.ToEvade();
-                    _player.ResetCharge();
-                    break;
-                default:
-                    throw new Exception();
-            }
-            //Debug.Log("Fight command : " + command);
-        }
-        
+        CommandProcessing();
         TimerTick();
     }
 
+    private void CommandProcessing()
+    {
+        if (_commands.Count <= 0)
+            return;
+        
+        var command = _commands.Dequeue();
+        switch (command)
+        {
+            case FightCommand.Charge:
+                _player.ToCharge();
+                break;
+            case FightCommand.Attack:
+                if(!_player.IsOnChargeState)
+                    break;
+                AttackData playerAttack = _player.TryAttack();
+                if (playerAttack.Damage > 0)
+                    HitFighter(_opponent, playerAttack);
+                else
+                    ShowWarningText();
+                _player.ResetCharge();
+                break;
+            case FightCommand.Defence:
+                _player.ToDefence();
+                _player.ResetCharge();
+                break;
+            case FightCommand.Evade:
+                _player.TryEvade();
+                _player.ResetCharge();
+                break;
+            default:
+                throw new Exception();
+        }
+    }
     private void ShowWarningText()
     {
         _screenCenterText.text = _textWarningConfig.WarningText;
@@ -96,7 +100,6 @@ public class BattleSystem : MonoBehaviour
         isTimer = true;
         timer = _textWarningConfig.LifeTime;
     }
-
     private void TimerTick()
     {
         if (!isTimer)
@@ -110,30 +113,11 @@ public class BattleSystem : MonoBehaviour
         isTimer = false;
     }
 
-    private void HitFighter(Fighter target, AttackData attack)
+    public void HitFighter(Fighter target, AttackData attack)
     {
         target.TakeHit(attack);
     }
-    private bool HitPlayer()
-    {
-        AttackData opponentAttack = _opponent.TryAttack();
-        if (opponentAttack.Damage > 0)
-        {
-            HitFighter(_player, opponentAttack);
-            return true;
-        }
-
-        return false;
-    }
-    private IEnumerator OpponentAI()
-    {
-        while (true)
-        {
-            _dangerLineSystem.AddOpponentAttack();    
-            yield return new WaitForSeconds(5f);
-        }
-    }
-    
+ 
     private void OnDestroy()
     {
         StopAllCoroutines();
