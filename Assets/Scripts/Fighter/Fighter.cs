@@ -21,11 +21,14 @@ public class Fighter : MonoBehaviour
     public bool IsOnChargeState => _model.state == FighterState.Charge;
     public float ChargeValue => _model.CurrentChargeTime;
     public float EvadeTime => _model.data.stateData.Find(x => x.State == FighterState.Evade).Time;
+    public string WinString => _model.data.WinString;
     
     public void Initialize(FighterModel model)
     {
         _model = model;
 
+        gameObject.name = model.data.name;
+        
         GenerateStates();
         
         HPSlider.maxValue = model.data.HitPoints;
@@ -40,6 +43,8 @@ public class Fighter : MonoBehaviour
             ChargeBar.Slider.maxValue = model.data.HeavyAttackChargeTime;
             model.OnChargeChange += ChargeBar.ChengeCharge;
         }
+        
+        ToIdleState();
     }
 
     private void GenerateStates()
@@ -156,6 +161,10 @@ public class Fighter : MonoBehaviour
         ChangeState(FighterState.NoEnergy);
         return default;
     }
+    public void ChangeStateOnEndBattle(bool isWinPose)
+    {
+        ChangeState(isWinPose ? FighterState.Win : FighterState.Lose);
+    }
     private void ChangeState(FighterState newState)
     {
         //Debug.Log("STATE : " + newState);
@@ -190,7 +199,6 @@ public class Fighter : MonoBehaviour
         _model.OnHPChange.Invoke(_model.CurrentHitPoints);
         if (_model.CurrentHitPoints <= 0)
         {
-            ChangeState(FighterState.Lose);
             _model.OnDeath.Invoke();
         }
         else

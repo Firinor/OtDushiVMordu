@@ -21,4 +21,7 @@ public class FighterData : ScriptableObject
     public int EvadeEnergyCost;
     [Space] 
     public List<FighterStateData> stateData;
+
+    [Space] 
+    public string WinString;
 }

@@ -8,11 +8,19 @@ public class BattleSystem : MonoBehaviour
     
     [SerializeField]
     private Image[] WinPoints;
+
+    private int _playerWinScore = 0;
+    private int _opponentWinScore = 0;
+    [SerializeField] 
+    private WinLoseConfig _winLoseConfig;
     
     [SerializeField]
     private Fighter _player;
     [SerializeField]
     private Fighter _opponent;
+
+    private FighterModel playerModel;
+    private FighterModel opponentModel;
     
     [SerializeField] 
     private TextMeshProUGUI _screenCenterText;
@@ -27,18 +35,66 @@ public class BattleSystem : MonoBehaviour
         InputSystem playerInput = GameObject.Find("InputSystem").GetComponent<InputSystem>();
         DangerLineSystem dangerLineSystem = GameObject.Find("DangerLineSystem").GetComponent<DangerLineSystem>();
         
-        InBattleParams @params = new InBattleParams { 
+        playerModel = new FighterModel(playerData);
+        opponentModel = new FighterModel(opponentData);
+        _player.Initialize(playerModel);
+        _opponent.Initialize(opponentModel);
+
+        playerModel.OnDeath += PlayerLose;
+        opponentModel.OnDeath += PlayerWin;
+
+        ResetUI();
+        
+        InBattleParams @params = GetInBattleParams(playerInput, dangerLineSystem);
+        ChangeState(new InBattle(@params));
+    }
+
+    private void ResetUI()
+    {
+        foreach (Image point in WinPoints)
+        {
+            point.color = _winLoseConfig.NeutralColor;
+        }
+    }
+    private InBattleParams GetInBattleParams(InputSystem playerInput, DangerLineSystem dangerLineSystem)
+    {
+        return new InBattleParams { 
             BattleSystem = this,
             Player =_player,
-            PlayerData = playerData,
             PlayerInput = playerInput,
             Opponent = _opponent,
-            OpponentData = opponentData,
             ScreenCenterText = _screenCenterText,
             TextWarningConfig = _textWarningConfig,
             DangerLineSystem = dangerLineSystem,
         };
-        ChangeState(new InBattle(@params));
+    }
+    private void PlayerWin() => EndOfRound(isPlayerWin: true);
+    private void PlayerLose() => EndOfRound(isPlayerWin: false);
+    private void EndOfRound(bool isPlayerWin)
+    {
+        _player.ChangeStateOnEndBattle(isPlayerWin);
+        _opponent.ChangeStateOnEndBattle(!isPlayerWin);
+        
+        Fighter winer = isPlayerWin ? _player : _opponent;
+        _screenCenterText.text = winer.WinString;
+        _screenCenterText.enabled = true;
+
+        if (isPlayerWin)
+        {
+            _playerWinScore++;
+            WinPoints[0].color = _winLoseConfig.PlayerWinColor;
+            if (_playerWinScore > 1)
+                WinPoints[1].color = _winLoseConfig.PlayerWinColor;
+        }
+        else
+        {
+            _opponentWinScore++;
+            WinPoints[3].color = _winLoseConfig.EnemyWinColor;
+            if (_opponentWinScore > 1)
+                WinPoints[2].color = _winLoseConfig.EnemyWinColor;
+        }
+        
+        ChangeState(new WinLoseState());
     }
 
     private void Update()
@@ -58,6 +114,8 @@ public class BattleSystem : MonoBehaviour
     
     private void OnDestroy()
     {
+        playerModel.OnDeath -= PlayerLose;
+        opponentModel.OnDeath -= PlayerWin;
         StopAllCoroutines();
     }
 }

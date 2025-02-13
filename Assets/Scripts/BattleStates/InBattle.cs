@@ -27,15 +27,8 @@ public class InBattle : BattleState
         _player = @params.Player;
         _opponent = @params.Opponent;
         _commands = @params.PlayerInput.commands;
-        
-        FighterModel playerModel = new FighterModel(@params.PlayerData);
-        FighterModel opponentModel = new FighterModel(@params.OpponentData);
-
         _screenCenterText = @params.ScreenCenterText;
         _textWarningConfig = @params.TextWarningConfig;
-        
-        _player.Initialize(playerModel);
-        _opponent.Initialize(opponentModel);
     }
     
     public override void OnEnter()
@@ -105,5 +98,18 @@ public class InBattle : BattleState
         
         _screenCenterText.enabled = false;
         isTimer = false;
+    }
+}
+
+public class WinLoseState : BattleState
+{
+    public override void OnEnter()
+    {
+    }
+    public override void Update()
+    {
+    }
+    public override void OnExit()
+    {  
     }
 }
