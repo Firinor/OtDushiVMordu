@@ -26,9 +26,8 @@ public class BattleSystem : MonoBehaviour
     private TextMeshProUGUI _screenCenterText;
     [SerializeField] 
     private TextWarningConfig _textWarningConfig;
-
-    //bootstrap
-    private void Awake()
+    
+    /*private void Awake()
     {
         var playerData = Resources.Load<FighterData>("Fighters/Bogatyr");
         var opponentData = Resources.Load<FighterData>("Fighters/Koshey");
@@ -47,7 +46,7 @@ public class BattleSystem : MonoBehaviour
         
         InBattleParams @params = GetInBattleParams(playerInput, dangerLineSystem);
         ChangeState(new InBattle(@params));
-    }
+    }*/
 
     private void ResetUI()
     {
