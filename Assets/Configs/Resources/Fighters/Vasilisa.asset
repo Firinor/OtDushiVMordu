@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Vasilisa
   m_EditorClassIdentifier: 
   Name: "\u0412\u0430\u0440\u0432\u0430\u0440\u0430"
+  Portrait: {fileID: -605437027, guid: ca0c8015ac7aa594788664613934cc03, type: 3}
   HitPoints: 150
   EnergyPoints: 150
   EnergyRegen: 1
@@ -23,5 +24,9 @@ MonoBehaviour:
   HeavyAttackChargeTime: 0
   ChargeEnergyCost: 0
   EvadeEnergyCost: 0
-  stateData: []
+  stateData:
+  - State: 0
+    Sprites:
+    - {fileID: 21300000, guid: 4db28b71b2627954db13d0981b0ba6da, type: 3}
+    Time: 0
   WinString: 

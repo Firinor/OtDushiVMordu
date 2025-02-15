@@ -5,6 +5,7 @@ using UnityEngine;
 public class FighterData : ScriptableObject
 {
     public string Name;
+    public Sprite Portrait;
     [Space]
     public int HitPoints;
     public int EnergyPoints;

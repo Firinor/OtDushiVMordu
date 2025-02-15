@@ -5,10 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/BattleGame.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: e351ea673dc279c4eb5a2dd77555c906
+  - enabled: 1
+    path: Assets/Scenes/ChooseFighter.unity
+    guid: bed84ea1f5f47c740b3b61e239b753f1
+  - enabled: 1
+    path: Assets/Scenes/WorldMap.unity
+    guid: df05d771f8d14f447a7e1e76d420cf4d
+  - enabled: 1
+    path: Assets/Scenes/BattleGame.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}

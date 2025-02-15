@@ -5,15 +5,10 @@ internal class Bootstrap
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void StartOfGame()
     {
-        LoadGameConfigs();
         LoadPlayerSettings();
         LoadPlayerProgress();
     }
-
-    private static void LoadGameConfigs()
-    {
-        
-    }
+    
     private static void LoadPlayerSettings()
     {
         ApplicationContext.Settings = SaveLoadService.Load<GameSettings>(SaveKey.Settings);

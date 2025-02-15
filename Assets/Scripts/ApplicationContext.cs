@@ -1,4 +1,14 @@
-﻿public static class ApplicationContext
+﻿using UnityEngine.SceneManagement;
+
+public enum Scene
+{
+    MainMenu,
+    ChooseFighter,
+    WorldMap,
+    Fight
+}
+
+public static class ApplicationContext
 {
     private static GameSettings _gameSettings;
     public static GameSettings Settings
@@ -12,4 +22,8 @@
     }
 
     public static GameContext Game { get; set; }
+}
+
+namespace FirExtensions
+{
 }

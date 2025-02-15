@@ -10,4 +10,12 @@
             SaveLoadService.Save(SaveKey.PlayerProgress, _progress);
         }
     }
+
+    public void PlayerWin()
+    {
+        _progress.WinCount++;
+        SaveLoadService.Save(SaveKey.PlayerProgress, _progress);
+    }
+
+    public FighterData NextBattleOpponent;
 }

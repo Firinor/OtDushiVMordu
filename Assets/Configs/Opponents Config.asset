@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fdf8c71d3d54d65b90fb2dc661af806, type: 3}
+  m_Name: Opponents Config
+  m_EditorClassIdentifier: 
+  Fighters:
+  - {fileID: 11400000, guid: 2ffd080d7b798f4428d45b57d425e96d, type: 2}
+  - {fileID: 11400000, guid: 71ff84fd4011a944da9e58f9897e18dd, type: 2}
+  - {fileID: 11400000, guid: f48485229912cd04483581571f33c7f5, type: 2}
+  - {fileID: 11400000, guid: 16ef1938d8fafdc40bf7932a8be9f899, type: 2}
+  - {fileID: 11400000, guid: 2782b9add481c1a40aa297f084a8498a, type: 2}
+  - {fileID: 11400000, guid: 57d16df9396c9c64c9425d1d0ea60fbc, type: 2}
+  Count: 5
+  LastBoss: {fileID: 11400000, guid: 207ce0ea5af183e4785e0f165e502b3f, type: 2}
