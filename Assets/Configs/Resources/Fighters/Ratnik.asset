@@ -29,4 +29,36 @@ MonoBehaviour:
     Sprites:
     - {fileID: 21300000, guid: e4d2702513ae79d4ebacc13ba74f94b9, type: 3}
     Time: 0
+  - State: 2
+    Sprites:
+    - {fileID: 21300000, guid: 0b8ec72e586389a458e8ccbd65f5febf, type: 3}
+    Time: 0.3
+  - State: 4
+    Sprites:
+    - {fileID: 21300000, guid: c1b82fcced6ff3a49a5ed45d863c6fe9, type: 3}
+    Time: 0.3
+  - State: 3
+    Sprites:
+    - {fileID: 21300000, guid: 31d494bead7522b408077b5f577e92bc, type: 3}
+    Time: 0.3
+  - State: 1
+    Sprites:
+    - {fileID: 21300000, guid: d94f0375abba413449e43cf2b9633703, type: 3}
+    Time: 1
+  - State: 5
+    Sprites:
+    - {fileID: 21300000, guid: 6caa9b071713f1143bbdbbfeed2941d9, type: 3}
+    Time: 1
+  - State: 6
+    Sprites:
+    - {fileID: 21300000, guid: e022a17855c44ce4ba9efc25935b5981, type: 3}
+    Time: 0
+  - State: 7
+    Sprites:
+    - {fileID: 21300000, guid: 12a00ac4b00eb054c8ae8765332d6b9f, type: 3}
+    Time: 0
+  - State: 8
+    Sprites:
+    - {fileID: 21300000, guid: 1a648cce575982f419a619481f03a828, type: 3}
+    Time: 0
   WinString: 

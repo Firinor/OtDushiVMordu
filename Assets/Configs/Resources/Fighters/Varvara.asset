@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10c0ead3fe7f488a8a84718e11bc6857, type: 3}
-  m_Name: Kot Bayun
+  m_Name: Varvara
   m_EditorClassIdentifier: 
-  Name: "\u041A\u043E\u0442 \u0411\u0430\u044E\u043D"
-  Portrait: {fileID: -1958498082, guid: b60548e0a731dab459061789c525bb5e, type: 3}
+  Name: "\u0412\u0430\u0440\u0432\u0430\u0440\u0430"
+  Portrait: {fileID: -605437027, guid: ca0c8015ac7aa594788664613934cc03, type: 3}
   HitPoints: 150
   EnergyPoints: 150
   EnergyRegen: 1
@@ -27,7 +27,7 @@ MonoBehaviour:
   stateData:
   - State: 0
     Sprites:
-    - {fileID: -90919864, guid: b60548e0a731dab459061789c525bb5e, type: 3}
+    - {fileID: 21300000, guid: 4db28b71b2627954db13d0981b0ba6da, type: 3}
     Time: 0
   - State: 2
     Sprites:

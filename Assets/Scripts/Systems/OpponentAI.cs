@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 
 public class OpponentAI
 {
-    private readonly BattleSystem _battleSystem;
+    private readonly BattleManager _battleManager;
     private readonly DangerLineSystem _dangerLineSystem;
     private readonly Fighter _AIFighter;//bot
     private readonly Fighter _opponent;//player
@@ -13,9 +13,9 @@ public class OpponentAI
     private readonly float _evadeTime;
     private readonly float _warningTime;
     
-    public OpponentAI(BattleSystem battleSystem, DangerLineSystem dangerLineSystem, Fighter self, Fighter opponent)
+    public OpponentAI(BattleManager battleManager, DangerLineSystem dangerLineSystem, Fighter self, Fighter opponent)
     {
-        _battleSystem = battleSystem;
+        _battleManager = battleManager;
         _dangerLineSystem = dangerLineSystem;
         _AIFighter = self;
         _opponent = opponent;

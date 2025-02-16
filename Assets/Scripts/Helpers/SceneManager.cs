@@ -4,7 +4,7 @@
     {
         public static void SwitchToScene(Scene sceneKey)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene((int)sceneKey);
+           UnityEngine.SceneManagement.SceneManager.LoadScene((int)sceneKey);
         }
     }
 }

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleSystem : MonoBehaviour
+public class BattleManager : MonoBehaviour
 {
     public BattleState state;
     
@@ -13,12 +13,20 @@ public class BattleSystem : MonoBehaviour
     private int _opponentWinScore = 0;
     [SerializeField] 
     private WinLoseConfig _winLoseConfig;
+    [SerializeField]
+    private InputSystem playerInput;
+    [SerializeField] 
+    private DangerLineSystem dangerLineSystem;
     
     [SerializeField]
     private Fighter _player;
     [SerializeField]
+    private FighterData _playerData;
+    [SerializeField]
     private Fighter _opponent;
-
+    [SerializeField]
+    private FighterData _opponentData;
+    
     private FighterModel playerModel;
     private FighterModel opponentModel;
     
@@ -27,12 +35,15 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] 
     private TextWarningConfig _textWarningConfig;
     
-    /*private void Awake()
+    private void Start()
     {
-        var playerData = Resources.Load<FighterData>("Fighters/Bogatyr");
-        var opponentData = Resources.Load<FighterData>("Fighters/Koshey");
-        InputSystem playerInput = GameObject.Find("InputSystem").GetComponent<InputSystem>();
-        DangerLineSystem dangerLineSystem = GameObject.Find("DangerLineSystem").GetComponent<DangerLineSystem>();
+        FighterData playerData = ApplicationContext.Game?.PlayerProgress.PlayerFighter;
+        FighterData opponentData = ApplicationContext.Game?.NextBattleOpponent;
+
+        if (playerData == null)
+            playerData = _playerData;
+        if (opponentData == null)
+            opponentData = _opponentData;
         
         playerModel = new FighterModel(playerData);
         opponentModel = new FighterModel(opponentData);
@@ -44,9 +55,9 @@ public class BattleSystem : MonoBehaviour
 
         ResetUI();
         
-        InBattleParams @params = GetInBattleParams(playerInput, dangerLineSystem);
+        InBattleParams @params = GetInBattleParams();
         ChangeState(new InBattle(@params));
-    }*/
+    }
 
     private void ResetUI()
     {
@@ -55,10 +66,10 @@ public class BattleSystem : MonoBehaviour
             point.color = _winLoseConfig.NeutralColor;
         }
     }
-    private InBattleParams GetInBattleParams(InputSystem playerInput, DangerLineSystem dangerLineSystem)
+    private InBattleParams GetInBattleParams()
     {
         return new InBattleParams { 
-            BattleSystem = this,
+            BattleManager = this,
             Player =_player,
             PlayerInput = playerInput,
             Opponent = _opponent,

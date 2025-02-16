@@ -2,7 +2,7 @@
 
 public struct InBattleParams
 {
-    public BattleSystem BattleSystem;
+    public BattleManager BattleManager;
     public Fighter Player;
     public InputSystem PlayerInput;
     public Fighter Opponent;

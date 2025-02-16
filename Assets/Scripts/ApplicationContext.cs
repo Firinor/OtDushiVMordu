@@ -23,7 +23,3 @@ public static class ApplicationContext
 
     public static GameContext Game { get; set; }
 }
-
-namespace FirExtensions
-{
-}

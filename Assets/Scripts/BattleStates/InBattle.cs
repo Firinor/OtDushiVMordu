@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InBattle : BattleState
 {
-    private readonly BattleSystem _battleSystem;
+    private readonly BattleManager _battleManager;
     private OpponentAI _opponentAI;
     
     private DangerLineSystem _dangerLineSystem;
@@ -22,7 +22,7 @@ public class InBattle : BattleState
 
     public InBattle(InBattleParams @params)
     {
-        _battleSystem = @params.BattleSystem;
+        _battleManager = @params.BattleManager;
         _dangerLineSystem = @params.DangerLineSystem;
         _player = @params.Player;
         _opponent = @params.Opponent;
@@ -34,8 +34,8 @@ public class InBattle : BattleState
     public override void OnEnter()
     {
         _dangerLineSystem.Initialize();
-        _opponentAI = new OpponentAI(_battleSystem, _dangerLineSystem, _opponent, _player);
-        _battleSystem.StartCoroutine(_opponentAI.Start());
+        _opponentAI = new OpponentAI(_battleManager, _dangerLineSystem, _opponent, _player);
+        _battleManager.StartCoroutine(_opponentAI.Start());
     }
     public override void Update()
     {
@@ -44,7 +44,7 @@ public class InBattle : BattleState
     }
     public override void OnExit()
     {  
-        _battleSystem.StopAllCoroutines();
+        _battleManager.StopAllCoroutines();
     }
     
     private void CommandProcessing()

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using FirGame.SceneManagement;
 using UnityEngine.UI;
@@ -6,6 +7,16 @@ public class WorldMapManager : MonoBehaviour
 {
     [SerializeField]
     private FighterBinder[] onMapOpponents;
+    
+    [SerializeField] 
+    private OpponentsConfig _opponents;
+
+    [SerializeField] 
+    private FighterData player;
+    [SerializeField] 
+    private Difficulty difficulty;
+    [SerializeField] 
+    private int winCount;
     
     void Start()
     {
@@ -16,6 +27,12 @@ public class WorldMapManager : MonoBehaviour
     {
         PlayerProgress progress = ApplicationContext.Game.PlayerProgress;
         FighterData[] opponents = progress.OpponentsFighters;
+        if (opponents == null)
+        {
+            progress = ApplicationContext.Game.PlayerProgress;
+            opponents = GenerateOpponents();
+        }
+        
         for (int i = 0; i < opponents.Length; i++)
         {
             onMapOpponents[i].ThisFighter = opponents[i];
@@ -25,9 +42,25 @@ public class WorldMapManager : MonoBehaviour
             opponentToggle.isOn = i < progress.WinCount;
             int index = i;
             opponentToggle.onValueChanged.AddListener(b => ToBattle(opponents[index]));
+            onMapOpponents[i].Initialize();
         }
     }
 
+    private FighterData[] GenerateOpponents()
+    {
+        List<FighterData> result = new OpponentsGenerator().GenerateNewOpponents(_opponents);
+        
+        ApplicationContext.Game.PlayerProgress = new PlayerProgress()
+        {
+            PlayerFighter = player,
+            Difficulty = difficulty,
+            OpponentsFighters = result.ToArray(),
+            WinCount = winCount
+        };
+
+        return ApplicationContext.Game.PlayerProgress.OpponentsFighters;
+    }
+    
     private void ToBattle(FighterData opponent)
     {
         ApplicationContext.Game.NextBattleOpponent = opponent;
@@ -38,7 +71,8 @@ public class WorldMapManager : MonoBehaviour
     {
         for (int i = 0; i < onMapOpponents.Length; i++)
         {
-            onMapOpponents[i].GetComponent<Toggle>().onValueChanged.RemoveAllListeners();
+            if (onMapOpponents[i] != null)
+                onMapOpponents[i].GetComponent<Toggle>().onValueChanged.RemoveAllListeners();
         }
     }
 }

@@ -621,8 +621,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1757836301}
   - {fileID: 1951169899}
+  - {fileID: 1757836301}
   - {fileID: 1665754780}
   - {fileID: 726650}
   m_Father: {fileID: 0}
@@ -1622,7 +1622,7 @@ GameObject:
   - component: {fileID: 1951169899}
   - component: {fileID: 1951169900}
   m_Layer: 0
-  m_Name: BattleSystem
+  m_Name: BattleManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1661,8 +1661,12 @@ MonoBehaviour:
   - {fileID: 510969689}
   - {fileID: 1410143467}
   _winLoseConfig: {fileID: 11400000, guid: 747334c66c0d93c4eb5575e018291a20, type: 2}
+  playerInput: {fileID: 1665754781}
+  dangerLineSystem: {fileID: 726651}
   _player: {fileID: 2025497483}
+  _playerData: {fileID: 11400000, guid: 71ff84fd4011a944da9e58f9897e18dd, type: 2}
   _opponent: {fileID: 238070130}
+  _opponentData: {fileID: 11400000, guid: 207ce0ea5af183e4785e0f165e502b3f, type: 2}
   _screenCenterText: {fileID: 1262654343}
   _textWarningConfig: {fileID: 11400000, guid: 47e34c7bf1a79b844ba66ee99549b54c, type: 2}
 --- !u!1 &2003038871

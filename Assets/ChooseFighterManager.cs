@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FirMath;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,6 +30,7 @@ public class ChooseFighterManager : MonoBehaviour
                         PlayerPick(_binders[index].ThisFighter);
                 }
             );
+            _binders[i].Initialize();
         }
 
         _binders[0].GetComponent<Toggle>().isOn = true;
@@ -40,15 +40,8 @@ public class ChooseFighterManager : MonoBehaviour
 
     private void GenerateOpponents()
     {
-        List<int> opponentsIndexes = GameMath.AFewCardsFromTheDeck(_opponents.Count, _opponents.Fighters.Length);
-        List<FighterData> result = new();
-        for (int i = 0; i < opponentsIndexes.Count - 1; i++)
-        {
-            int index = opponentsIndexes[i];
-            result.Add(_opponents.Fighters[index]);
-        }
-        result.Add(_opponents.LastBoss);
-    
+        List<FighterData> result = new OpponentsGenerator().GenerateNewOpponents(_opponents);
+        
         ApplicationContext.Game.PlayerProgress = new PlayerProgress()
         {
             PlayerFighter = ApplicationContext.Game.PlayerProgress.PlayerFighter,
@@ -56,6 +49,7 @@ public class ChooseFighterManager : MonoBehaviour
             OpponentsFighters = result.ToArray(),
         };
     }
+
 
     private void PlayerPick(FighterData pick)
     {

@@ -880,6 +880,10 @@ MonoBehaviour:
   - {fileID: 858057135}
   - {fileID: 1778777946}
   - {fileID: 1565928513}
+  _opponents: {fileID: 11400000, guid: 7fdf2d8319c8e064db1316b15803d910, type: 2}
+  player: {fileID: 11400000, guid: 16ef1938d8fafdc40bf7932a8be9f899, type: 2}
+  difficulty: 1
+  winCount: 2
 --- !u!4 &1856737693
 Transform:
   m_ObjectHideFlags: 0
