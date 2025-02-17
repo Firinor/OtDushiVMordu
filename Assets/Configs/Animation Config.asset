@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3824598fafe4414abd59ab815f9b0216, type: 3}
+  m_Name: Animation Config
+  m_EditorClassIdentifier: 
+  TimeLimit: 5
+  Background: 1
+  VS: 1
+  PlayerFighter: 1
+  OpponentFighter: 1
+  PlayerHP: 1
+  OpponentHP: 1
+  PlayerCharge: 1
+  OpponentCharge: 1
+  DangerLine: 1
+  WinPoints: 1

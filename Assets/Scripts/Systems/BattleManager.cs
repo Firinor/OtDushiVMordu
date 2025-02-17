@@ -7,16 +7,18 @@ public class BattleManager : MonoBehaviour
     public BattleState state;
     
     [SerializeField]
-    private Image[] WinPoints;
+    private Image[] _winPoints;
 
     private int _playerWinScore = 0;
     private int _opponentWinScore = 0;
     [SerializeField] 
     private WinLoseConfig _winLoseConfig;
     [SerializeField]
-    private InputSystem playerInput;
+    private InputSystem _playerInput;
     [SerializeField] 
-    private DangerLineSystem dangerLineSystem;
+    private DangerLineSystem _dangerLineSystem;
+    [SerializeField] 
+    private AnimationController _animationController;
     
     [SerializeField]
     private Fighter _player;
@@ -27,8 +29,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private FighterData _opponentData;
     
-    private FighterModel playerModel;
-    private FighterModel opponentModel;
+    private FighterModel _playerModel;
+    private FighterModel _opponentModel;
     
     [SerializeField] 
     private TextMeshProUGUI _screenCenterText;
@@ -40,28 +42,33 @@ public class BattleManager : MonoBehaviour
         FighterData playerData = ApplicationContext.Game?.PlayerProgress.PlayerFighter;
         FighterData opponentData = ApplicationContext.Game?.NextBattleOpponent;
 
-        if (playerData == null)
+        if (playerData is null)
             playerData = _playerData;
-        if (opponentData == null)
+        if (opponentData is null)
             opponentData = _opponentData;
         
-        playerModel = new FighterModel(playerData);
-        opponentModel = new FighterModel(opponentData);
-        _player.Initialize(playerModel);
-        _opponent.Initialize(opponentModel);
+        _playerModel = new FighterModel(playerData);
+        _opponentModel = new FighterModel(opponentData);
+        _player.Initialize(_playerModel);
+        _opponent.Initialize(_opponentModel);
 
-        playerModel.OnDeath += PlayerLose;
-        opponentModel.OnDeath += PlayerWin;
+        _playerModel.OnDeath += PlayerLose;
+        _opponentModel.OnDeath += PlayerWin;
 
         ResetUI();
         
         InBattleParams @params = GetInBattleParams();
-        ChangeState(new InBattle(@params));
+        _animationController.OnEndAllAnimations += () =>
+        {
+            ChangeState(new InBattle(@params));
+        };
+        
+        ChangeState(new AnimationsState(_animationController));
     }
 
     private void ResetUI()
     {
-        foreach (Image point in WinPoints)
+        foreach (Image point in _winPoints)
         {
             point.color = _winLoseConfig.NeutralColor;
         }
@@ -71,11 +78,11 @@ public class BattleManager : MonoBehaviour
         return new InBattleParams { 
             BattleManager = this,
             Player =_player,
-            PlayerInput = playerInput,
+            PlayerInput = _playerInput,
             Opponent = _opponent,
             ScreenCenterText = _screenCenterText,
             TextWarningConfig = _textWarningConfig,
-            DangerLineSystem = dangerLineSystem,
+            DangerLineSystem = _dangerLineSystem,
         };
     }
     private void PlayerWin() => EndOfRound(isPlayerWin: true);
@@ -92,16 +99,16 @@ public class BattleManager : MonoBehaviour
         if (isPlayerWin)
         {
             _playerWinScore++;
-            WinPoints[0].color = _winLoseConfig.PlayerWinColor;
+            _winPoints[0].color = _winLoseConfig.PlayerWinColor;
             if (_playerWinScore > 1)
-                WinPoints[1].color = _winLoseConfig.PlayerWinColor;
+                _winPoints[1].color = _winLoseConfig.PlayerWinColor;
         }
         else
         {
             _opponentWinScore++;
-            WinPoints[3].color = _winLoseConfig.EnemyWinColor;
+            _winPoints[3].color = _winLoseConfig.EnemyWinColor;
             if (_opponentWinScore > 1)
-                WinPoints[2].color = _winLoseConfig.EnemyWinColor;
+                _winPoints[2].color = _winLoseConfig.EnemyWinColor;
         }
         
         ChangeState(new WinLoseState());
@@ -124,8 +131,8 @@ public class BattleManager : MonoBehaviour
     
     private void OnDestroy()
     {
-        playerModel.OnDeath -= PlayerLose;
-        opponentModel.OnDeath -= PlayerWin;
+        _playerModel.OnDeath -= PlayerLose;
+        _opponentModel.OnDeath -= PlayerWin;
         StopAllCoroutines();
     }
 }
