@@ -1,72 +1,76 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using FirAnimations;
 
 public class AnimationController : MonoBehaviour
 {
-    [SerializeField] 
-    private Animation _background;
-    [SerializeField] 
-    private Animation _vs;
-    [SerializeField] 
-    private Animation _playerFighter;
-    [SerializeField] 
-    private Animation _opponentFighter;
-    [SerializeField] 
-    private Animation _playerHP;
-    [SerializeField] 
-    private Animation _opponentHP;
-    [SerializeField] 
-    private Animation _playerCharge;
-    [SerializeField] 
-    private Animation _opponentCharge;
-    [SerializeField] 
-    private Animation _dangerLine;
-    [SerializeField] 
-    private Animation _winPoints;
-
-    [SerializeField] 
-    private AnimationConfig _animationConfig;
+    [SerializeField] private RectTransformAnimation _background;
+    [SerializeField] private float _backgroundStartTime;
+    [SerializeField] private ColorAnimation _backgroundColor;
+    [SerializeField] private float _backgroundColorStartTime;
+    [SerializeField] private RectTransformAnimation _vs;
+    [SerializeField] private float _vsStartTime;
+    [SerializeField] private RectTransformAnimation _playerFighter;
+    [SerializeField] private float _playerFighterStartTime;
+    [SerializeField] private RectTransformAnimation _opponentFighter;
+    [SerializeField] private float _opponentFighterStartTime;
+    [SerializeField] private RectTransformAnimation _playerHP;
+    [SerializeField] private float _playerHPStartTime;
+    [SerializeField] private RectTransformAnimation _opponentHP;
+    [SerializeField] private float _opponentHPStartTime;
+    [SerializeField] private RectTransformAnimation _playerCharge;
+    [SerializeField] private float _playerChargeStartTime;
+    [SerializeField] private RectTransformAnimation _opponentCharge;
+    [SerializeField] private float _opponentChargeStartTime;
+    [SerializeField] private ColorAnimation _dangerLine;
+    [SerializeField] private float _dangerLineStartTime;
+    [SerializeField] private RectTransformAnimation _winPoints;
+    [SerializeField] private float _winPointsStartTime;
 
     private float time;
+    [SerializeField]
     private float timeLimit;
 
     public Action OnEndAllAnimations;
+    
     public void StartAnimations()
     {
+        StartCoroutine(PlayAnimation(_background, _backgroundStartTime));
+        StartCoroutine(PlayAnimation(_backgroundColor, _backgroundColorStartTime));
+        StartCoroutine(PlayAnimation(_vs, _vsStartTime));
+        StartCoroutine(PlayAnimation(_playerFighter, _playerFighterStartTime));
+        StartCoroutine(PlayAnimation(_playerHP, _playerHPStartTime));
+        StartCoroutine(PlayAnimation(_playerCharge, _playerChargeStartTime));
+        StartCoroutine(PlayAnimation(_opponentFighter, _opponentFighterStartTime));
+        StartCoroutine(PlayAnimation(_opponentHP, _opponentHPStartTime));
+        StartCoroutine(PlayAnimation(_opponentCharge, _opponentChargeStartTime));
+        StartCoroutine(PlayAnimation(_dangerLine, _dangerLineStartTime));
+        StartCoroutine(PlayAnimation(_winPoints, _winPointsStartTime));
+        
         time = 0;
-        timeLimit = _animationConfig.TimeLimit;
         enabled = true;
     }
 
+    private IEnumerator PlayAnimation(IFirAnimation animation, float startDelay = 0)
+    {
+        animation.Initialize();
+        float time = 0;
+        while (time < startDelay)
+        {
+            time += Time.deltaTime;
+            yield return null;
+        }
+        animation.Play();
+    }
+    
     private void Update()
     {
         time += Time.deltaTime;
-        if (time >= _animationConfig.Background && !_background.isPlaying)
-            _background.Play();
-        if (time >= _animationConfig.VS && !_vs.isPlaying)
-            _vs.Play();
-        if (time >= _animationConfig.PlayerFighter && !_playerFighter.isPlaying)
-            _playerFighter.Play();
-        if (time >= _animationConfig.PlayerCharge && !_playerCharge.isPlaying)
-            _playerCharge.Play();
-        if (time >= _animationConfig.PlayerHP && !_playerHP.isPlaying)
-            _playerHP.Play();
-        if (time >= _animationConfig.OpponentFighter && !_opponentFighter.isPlaying)
-            _opponentFighter.Play();
-        if (time >= _animationConfig.OpponentCharge && !_opponentCharge.isPlaying)
-            _opponentCharge.Play();
-        if (time >= _animationConfig.OpponentHP && !_opponentHP.isPlaying)
-            _opponentHP.Play();
-        if (time >= _animationConfig.DangerLine && !_dangerLine.isPlaying)
-            _dangerLine.Play();
-        if (time >= _animationConfig.WinPoints && !_winPoints.isPlaying)
-            _winPoints.Play();
-
         if (time > timeLimit)
         {
             enabled = false;
             OnEndAllAnimations?.Invoke();
-            Debug.Log("OnEndAllAnimations");
         }
     }
 }

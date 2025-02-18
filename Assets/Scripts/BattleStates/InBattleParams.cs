@@ -7,6 +7,6 @@ public struct InBattleParams
     public InputSystem PlayerInput;
     public Fighter Opponent;
     public TextMeshProUGUI ScreenCenterText;
-    public TextWarningConfig TextWarningConfig;
+    public TextConfig TextWarningConfig;
     public DangerLineSystem DangerLineSystem;
 }

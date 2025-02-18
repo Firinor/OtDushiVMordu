@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine;
 
 public class InBattle : BattleState
 {
@@ -15,7 +14,7 @@ public class InBattle : BattleState
     private readonly Fighter _opponent;
     
     private TextMeshProUGUI _screenCenterText;
-    private TextWarningConfig _textWarningConfig;
+    private TextConfig _textWarningConfig;
     
     private float timer;
     private bool isTimer;
@@ -40,7 +39,6 @@ public class InBattle : BattleState
     public override void Update()
     {
         CommandProcessing();
-        TimerTick();
     }
     public override void OnExit()
     {  
@@ -82,21 +80,6 @@ public class InBattle : BattleState
     }
     private void ShowWarningText()
     {
-        _screenCenterText.text = _textWarningConfig.WarningText;
-        _screenCenterText.enabled = true;
-        isTimer = true;
-        timer = _textWarningConfig.LifeTime;
-    }
-    private void TimerTick()
-    {
-        if (!isTimer)
-            return;
-        
-        timer -= Time.deltaTime;
-        if (timer > 0)
-            return;
-        
-        _screenCenterText.enabled = false;
-        isTimer = false;
+        throw new Exception();
     }
 }

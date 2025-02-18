@@ -35,7 +35,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] 
     private TextMeshProUGUI _screenCenterText;
     [SerializeField] 
-    private TextWarningConfig _textWarningConfig;
+    private TextConfig _textConfig;
     
     private void Start()
     {
@@ -57,13 +57,24 @@ public class BattleManager : MonoBehaviour
 
         ResetUI();
         
-        InBattleParams @params = GetInBattleParams();
-        _animationController.OnEndAllAnimations += () =>
-        {
-            ChangeState(new InBattle(@params));
-        };
-        
+        _animationController.OnEndAllAnimations += ToGetReadyState;
         ChangeState(new AnimationsState(_animationController));
+    }
+
+    private void ToGetReadyState()
+    {
+        GetReadyState getReadyState 
+            = new GetReadyState(_textConfig, _screenCenterText);
+        
+        getReadyState.OnEndState += ToInBattleState;
+            
+        ChangeState(getReadyState);
+    }
+
+    private void ToInBattleState()
+    {
+        InBattleParams @params = GetInBattleParams();
+        ChangeState(new InBattle(@params));
     }
 
     private void ResetUI()
@@ -81,7 +92,7 @@ public class BattleManager : MonoBehaviour
             PlayerInput = _playerInput,
             Opponent = _opponent,
             ScreenCenterText = _screenCenterText,
-            TextWarningConfig = _textWarningConfig,
+            TextWarningConfig = _textConfig,
             DangerLineSystem = _dangerLineSystem,
         };
     }
@@ -94,7 +105,6 @@ public class BattleManager : MonoBehaviour
         
         Fighter winer = isPlayerWin ? _player : _opponent;
         _screenCenterText.text = winer.WinString;
-        _screenCenterText.enabled = true;
 
         if (isPlayerWin)
         {
@@ -111,7 +121,7 @@ public class BattleManager : MonoBehaviour
                 _winPoints[2].color = _winLoseConfig.EnemyWinColor;
         }
         
-        ChangeState(new WinLoseState());
+        ChangeState(new EndOfRoundState(winer));
     }
 
     private void Update()
