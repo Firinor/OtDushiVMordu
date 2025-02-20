@@ -19,20 +19,19 @@ public class InBattle : BattleState
     private float timer;
     private bool isTimer;
 
-    public InBattle(InBattleParams @params)
+    public InBattle(BattleManager manager)
     {
-        _battleManager = @params.BattleManager;
-        _dangerLineSystem = @params.DangerLineSystem;
-        _player = @params.Player;
-        _opponent = @params.Opponent;
-        _commands = @params.PlayerInput.commands;
-        _screenCenterText = @params.ScreenCenterText;
-        _textWarningConfig = @params.TextWarningConfig;
+        _battleManager = manager;
+        _dangerLineSystem = manager.DangerLineSystem;
+        _player = manager.Player;
+        _opponent = manager.Opponent;
+        _commands = manager.PlayerInput.commands;
+        _screenCenterText = manager.CenterText;
+        _textWarningConfig = manager.TextConfig;
     }
     
     public override void OnEnter()
     {
-        _dangerLineSystem.Initialize();
         _opponentAI = new OpponentAI(_battleManager, _dangerLineSystem, _opponent, _player);
         _battleManager.StartCoroutine(_opponentAI.Start());
     }

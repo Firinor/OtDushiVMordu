@@ -24,12 +24,13 @@ public class DangerLineSystem : MonoBehaviour
 
     private Func<bool> OnPlayerHit;
     
-    public void Initialize()
+    public void ClearAll()
     {
         for (int i = 0; i < hitPool.childCount; i++)
         {
             Destroy(hitPool.GetChild(i).gameObject); 
         }
+        enemyWarnings = new ();
     }
     
     private void Update()

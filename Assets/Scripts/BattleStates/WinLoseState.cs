@@ -1,4 +1,6 @@
-﻿public class EndOfBattleState : BattleState
+﻿using FirGame.SceneManagement;
+
+public class EndOfBattleState : BattleState
 {
     public override void OnEnter()
     {
@@ -8,6 +10,6 @@
     }
     public override void OnExit()
     {  
-        //SceneManager.SwitchToScene(Scene.WorldMap);
+        SceneManager.SwitchToScene(Scene.WorldMap);
     }
 }

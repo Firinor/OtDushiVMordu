@@ -1,5 +1,9 @@
-﻿public abstract class BattleState
+﻿using System;
+
+public abstract class BattleState
 {
+    public Action OnEndState;
+    
     public virtual void OnEnter()
     {
     }

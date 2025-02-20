@@ -1,23 +1,27 @@
-﻿using System;
-using FirAnimations;
+﻿using FirAnimations;
+using FirTime;
 using TMPro;
 using Object = UnityEngine.Object;
-
 
 public class GetReadyState : BattleState
 {
     private TextConfig _config;
     private TextMeshProUGUI _animationTarget;
-
-    public Action OnEndState;
+    private Fighter[] _fighters;
+    private DangerLineSystem _dangerLineSystem;
+    private float _timeLimit;
     
-    public GetReadyState(TextConfig config, TextMeshProUGUI animationTarget)
+    public GetReadyState(BattleManager manager)
     {
-        _config = config;
-        _animationTarget = animationTarget;
+        _fighters = new[]{manager.Player, manager.Opponent};
+        _config = manager.TextConfig;
+        _animationTarget = manager.CenterText;
+        _dangerLineSystem = manager.DangerLineSystem;
+        _timeLimit = manager.StatesTimeConfig.GerReadyLifeTime;
     }
     public override void OnEnter()
     {
+        PrepareFighters();
         TextAnimation readyAnimation = _animationTarget.gameObject.AddComponent<TextAnimation>();
         readyAnimation.textComponent = _animationTarget;
         _animationTarget.text = _config.GetReadyText;
@@ -27,6 +31,17 @@ public class GetReadyState : BattleState
         readyAnimation.OnComplete += DisplayFightText;
         readyAnimation.OnComplete += () => Object.Destroy(readyAnimation);
         readyAnimation.enabled = true;
+        
+        new Timer().Start(_timeLimit, () => OnEndState?.Invoke());
+    }
+
+    private void PrepareFighters()
+    {
+        _dangerLineSystem.ClearAll();
+        foreach (Fighter fighter in _fighters)
+        {
+            fighter.PrepareToBattle();
+        }
     }
 
     private void DisplayFightText()
@@ -40,7 +55,6 @@ public class GetReadyState : BattleState
         fightAnimation.OnComplete += () =>
         {
             Object.Destroy(fightAnimation);
-            OnEndState?.Invoke();
         };
         fightAnimation.enabled = true;
     }

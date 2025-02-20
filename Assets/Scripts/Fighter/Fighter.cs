@@ -22,6 +22,7 @@ public class Fighter : MonoBehaviour
     public float ChargeValue => _model.CurrentChargeTime;
     public float EvadeTime => _model.data.stateData.Find(x => x.State == FighterState.Evade).Time;
     public string WinString => _model.data.WinString;
+    public int WinCount => _model.WinCount;
     
     public void Initialize(FighterModel model)
     {
@@ -45,6 +46,12 @@ public class Fighter : MonoBehaviour
         }
         
         ToIdleState();
+    }
+
+    public void AddWinPoint()
+    {
+        _model.WinCount++;
+        _model.OnWinCountChange?.Invoke(_model.WinCount);
     }
 
     private void GenerateStates()
@@ -121,6 +128,16 @@ public class Fighter : MonoBehaviour
         ToIdleState();
         
         isTimer = false;
+    }
+    public void PrepareToBattle()
+    {
+        _model.CurrentHitPoints = _model.data.HitPoints;
+        _model.CurrentEnergyPoints = _model.data.EnergyPoints;
+        _model.CurrentChargeTime = 0;
+        _model.OnHPChange?.Invoke(_model.CurrentHitPoints);
+        _model.OnEPChange?.Invoke(_model.CurrentEnergyPoints);
+        _model.OnChargeChange?.Invoke(_model.CurrentChargeTime);
+        ChangeState(FighterState.Idle);
     }
 
     private void ToIdleState()

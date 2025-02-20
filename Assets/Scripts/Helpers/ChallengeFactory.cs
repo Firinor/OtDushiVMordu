@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using FirMath;
 
-public class OpponentsGenerator
+public class ChallengeFactory
 {
     public List<FighterData> GenerateNewOpponents(OpponentsConfig _opponents)
     {

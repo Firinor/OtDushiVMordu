@@ -7,3 +7,4 @@ public class WinLoseConfig : ScriptableObject
     public Color PlayerWinColor;
     public Color EnemyWinColor;
 }
+

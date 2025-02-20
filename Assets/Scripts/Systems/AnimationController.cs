@@ -28,14 +28,16 @@ public class AnimationController : MonoBehaviour
     [SerializeField] private RectTransformAnimation _winPoints;
     [SerializeField] private float _winPointsStartTime;
 
-    private float time;
-    [SerializeField]
-    private float timeLimit;
+    private float _time;
+    private float _timeLimit;
 
     public Action OnEndAllAnimations;
     
-    public void StartAnimations()
+    public void StartAnimations(float timeLimit)
     {
+        _time = 0;
+        _timeLimit = timeLimit;
+        
         StartCoroutine(PlayAnimation(_background, _backgroundStartTime));
         StartCoroutine(PlayAnimation(_backgroundColor, _backgroundColorStartTime));
         StartCoroutine(PlayAnimation(_vs, _vsStartTime));
@@ -48,7 +50,6 @@ public class AnimationController : MonoBehaviour
         StartCoroutine(PlayAnimation(_dangerLine, _dangerLineStartTime));
         StartCoroutine(PlayAnimation(_winPoints, _winPointsStartTime));
         
-        time = 0;
         enabled = true;
     }
 
@@ -66,8 +67,8 @@ public class AnimationController : MonoBehaviour
     
     private void Update()
     {
-        time += Time.deltaTime;
-        if (time > timeLimit)
+        _time += Time.deltaTime;
+        if (_time > _timeLimit)
         {
             enabled = false;
             OnEndAllAnimations?.Invoke();

@@ -10,14 +10,17 @@ public class FighterModel
     }
 
     public FighterState state;
-    
+
     public FighterData data;
     public float CurrentHitPoints;
     public float CurrentEnergyPoints;
     public float CurrentChargeTime;
 
+    public int WinCount;
+
     public Action<float> OnHPChange;
     public Action<float> OnEPChange;
     public Action<float> OnChargeChange;
+    public Action<int> OnWinCountChange;
     public Action OnDeath;
 }

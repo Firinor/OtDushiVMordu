@@ -48,7 +48,7 @@ public class WorldMapManager : MonoBehaviour
 
     private FighterData[] GenerateOpponents()
     {
-        List<FighterData> result = new OpponentsGenerator().GenerateNewOpponents(_opponents);
+        List<FighterData> result = new ChallengeFactory().GenerateNewOpponents(_opponents);
         
         ApplicationContext.Game.PlayerProgress = new PlayerProgress()
         {

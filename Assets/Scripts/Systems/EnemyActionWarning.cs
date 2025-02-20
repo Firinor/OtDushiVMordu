@@ -60,7 +60,8 @@ public class EnemyActionWarning: IDisposable
     private void ToDisable()
     {
         TryUseAction = null;
-        Transform?.gameObject.SetActive(false);
+        if(Transform != null)
+            Transform.gameObject.SetActive(false);
     }
 
     public void Dispose()

@@ -9,17 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3824598fafe4414abd59ab815f9b0216, type: 3}
-  m_Name: Animation Config
+  m_Script: {fileID: 11500000, guid: 5d3e7f4b48e7496d9659a57b004cfdfd, type: 3}
+  m_Name: States Time Config
   m_EditorClassIdentifier: 
-  TimeLimit: 5
-  Background: 1
-  VS: 1
-  PlayerFighter: 1
-  OpponentFighter: 1
-  PlayerHP: 1
-  OpponentHP: 1
-  PlayerCharge: 1
-  OpponentCharge: 1
-  DangerLine: 1
-  WinPoints: 1
+  VSLifeTime: 6
+  GerReadyLifeTime: 2
+  EndOfRoundLifeTime: 2

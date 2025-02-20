@@ -1,31 +1,43 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
-    public BattleState state;
+    private BattleState _state;
     
     [SerializeField]
-    private Image[] _winPoints;
-
-    private int _playerWinScore = 0;
-    private int _opponentWinScore = 0;
+    private Image[] _playerWinPoints;
+    public Image[] PlayerWinPoints => _playerWinPoints;
+    [SerializeField]
+    private Image[] _opponentWinPoints;
+    public Image[] OpponentWinPoints => _opponentWinPoints;
+    
     [SerializeField] 
     private WinLoseConfig _winLoseConfig;
+    public WinLoseConfig WinLoseConfig => _winLoseConfig;
+    [SerializeField] 
+    private BattleStatesTimeConfig _statesTimeConfig;
+    public BattleStatesTimeConfig StatesTimeConfig => _statesTimeConfig;
     [SerializeField]
     private InputSystem _playerInput;
+    public InputSystem PlayerInput => _playerInput;
     [SerializeField] 
     private DangerLineSystem _dangerLineSystem;
+    public DangerLineSystem DangerLineSystem => _dangerLineSystem;
     [SerializeField] 
     private AnimationController _animationController;
+    public AnimationController AnimationController => _animationController;
     
     [SerializeField]
     private Fighter _player;
+    public Fighter Player => _player;
     [SerializeField]
     private FighterData _playerData;
     [SerializeField]
     private Fighter _opponent;
+    public Fighter Opponent => _opponent;
     [SerializeField]
     private FighterData _opponentData;
     
@@ -34,8 +46,10 @@ public class BattleManager : MonoBehaviour
     
     [SerializeField] 
     private TextMeshProUGUI _screenCenterText;
+    public TextMeshProUGUI CenterText => _screenCenterText;
     [SerializeField] 
     private TextConfig _textConfig;
+    public TextConfig TextConfig => _textConfig;
     
     private void Start()
     {
@@ -57,14 +71,36 @@ public class BattleManager : MonoBehaviour
 
         ResetUI();
         
+        _playerModel.OnWinCountChange += OnPlayerWin;
+        _opponentModel.OnWinCountChange += OnEnemyWin;
+        
         _animationController.OnEndAllAnimations += ToGetReadyState;
-        ChangeState(new AnimationsState(_animationController));
+        ChangeState(new AnimationsState(this));
     }
 
+    private void OnPlayerWin(int winCount)
+    {
+        if (winCount == 1)
+            PlayerWinPoints[0].color = _winLoseConfig.PlayerWinColor;
+        else if (winCount == 2)
+            PlayerWinPoints[1].color = _winLoseConfig.PlayerWinColor;
+        else
+            throw new Exception();
+    }
+    private void OnEnemyWin(int winCount)
+    {
+        if (winCount == 1)
+            OpponentWinPoints[0].color = _winLoseConfig.EnemyWinColor;
+        else if (winCount == 2)
+            OpponentWinPoints[1].color = _winLoseConfig.EnemyWinColor;
+        else
+            throw new Exception();
+    }
+    
     private void ToGetReadyState()
     {
         GetReadyState getReadyState 
-            = new GetReadyState(_textConfig, _screenCenterText);
+            = new GetReadyState(this);
         
         getReadyState.OnEndState += ToInBattleState;
             
@@ -73,70 +109,56 @@ public class BattleManager : MonoBehaviour
 
     private void ToInBattleState()
     {
-        InBattleParams @params = GetInBattleParams();
-        ChangeState(new InBattle(@params));
+        ChangeState(new InBattle(this));
     }
 
     private void ResetUI()
     {
-        foreach (Image point in _winPoints)
+        foreach (Image point in PlayerWinPoints)
+        {
+            point.color = _winLoseConfig.NeutralColor;
+        }
+        foreach (Image point in OpponentWinPoints)
         {
             point.color = _winLoseConfig.NeutralColor;
         }
     }
-    private InBattleParams GetInBattleParams()
-    {
-        return new InBattleParams { 
-            BattleManager = this,
-            Player =_player,
-            PlayerInput = _playerInput,
-            Opponent = _opponent,
-            ScreenCenterText = _screenCenterText,
-            TextWarningConfig = _textConfig,
-            DangerLineSystem = _dangerLineSystem,
-        };
-    }
     private void PlayerWin() => EndOfRound(isPlayerWin: true);
     private void PlayerLose() => EndOfRound(isPlayerWin: false);
     private void EndOfRound(bool isPlayerWin)
+    { 
+        ChangeState(new EndOfRoundState(this, isPlayerWin));
+    }
+    public void NextRound()
     {
-        _player.ChangeStateOnEndBattle(isPlayerWin);
-        _opponent.ChangeStateOnEndBattle(!isPlayerWin);
-        
-        Fighter winer = isPlayerWin ? _player : _opponent;
-        _screenCenterText.text = winer.WinString;
-
-        if (isPlayerWin)
+        if (Player.WinCount == 2)
         {
-            _playerWinScore++;
-            _winPoints[0].color = _winLoseConfig.PlayerWinColor;
-            if (_playerWinScore > 1)
-                _winPoints[1].color = _winLoseConfig.PlayerWinColor;
+            ApplicationContext.Game.PlayerWin();
+            ChangeState(new EndOfBattleState());
+        }
+        else if(Opponent.WinCount == 2)
+        {
+            ChangeState(new EndOfBattleState());
         }
         else
         {
-            _opponentWinScore++;
-            _winPoints[3].color = _winLoseConfig.EnemyWinColor;
-            if (_opponentWinScore > 1)
-                _winPoints[2].color = _winLoseConfig.EnemyWinColor;
+            ToGetReadyState();
         }
-        
-        ChangeState(new EndOfRoundState(winer));
     }
 
     private void Update()
     {
-        state?.Update();
+        _state?.Update();
     }
     
     private void ChangeState(BattleState newState)
     {
-        if (state == newState)
+        if (_state == newState)
             return;
         
-        state?.OnExit();
-        state = newState;
-        state.OnEnter();
+        _state?.OnExit();
+        _state = newState;
+        _state.OnEnter();
     }
     
     private void OnDestroy()
