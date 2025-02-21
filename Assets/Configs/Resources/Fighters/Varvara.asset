@@ -17,13 +17,13 @@ MonoBehaviour:
   HitPoints: 150
   EnergyPoints: 150
   EnergyRegen: 1
-  LightAttackDamage: 0
-  LightAttackEnergyCost: 0
-  HeavyAttackDamage: 0
-  HeavyAttackEnergyCost: 0
-  HeavyAttackChargeTime: 0
-  ChargeEnergyCost: 0
-  EvadeEnergyCost: 0
+  LightAttackDamage: 2
+  LightAttackEnergyCost: 15
+  HeavyAttackDamage: 25
+  HeavyAttackEnergyCost: 20
+  HeavyAttackChargeTime: 1
+  ChargeEnergyCost: 1
+  EvadeEnergyCost: 1
   stateData:
   - State: 0
     Sprites:

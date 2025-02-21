@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d3e7f4b48e7496d9659a57b004cfdfd, type: 3}
   m_Name: States Time Config
   m_EditorClassIdentifier: 
-  VSLifeTime: 6
+  VSLifeTime: 4
   GerReadyLifeTime: 2
   EndOfRoundLifeTime: 2

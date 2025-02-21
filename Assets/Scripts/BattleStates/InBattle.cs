@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FirAnimations;
 using TMPro;
+using UnityEngine;
 
 public class InBattle : BattleState
 {
@@ -8,7 +10,7 @@ public class InBattle : BattleState
     private OpponentAI _opponentAI;
     
     private DangerLineSystem _dangerLineSystem;
-    private readonly Queue<FightCommand> _commands;
+    private Queue<FightCommand> _commands;
     
     private readonly Fighter _player;
     private readonly Fighter _opponent;
@@ -32,8 +34,10 @@ public class InBattle : BattleState
     
     public override void OnEnter()
     {
+        _commands.Clear();
         _opponentAI = new OpponentAI(_battleManager, _dangerLineSystem, _opponent, _player);
         _battleManager.StartCoroutine(_opponentAI.Start());
+        _player.OnNoEnergy += ShowWarningText;
     }
     public override void Update()
     {
@@ -41,6 +45,7 @@ public class InBattle : BattleState
     }
     public override void OnExit()
     {  
+        _player.OnNoEnergy -= ShowWarningText;
         _battleManager.StopAllCoroutines();
     }
     
@@ -61,8 +66,6 @@ public class InBattle : BattleState
                 AttackData playerAttack = _player.TryAttack();
                 if (playerAttack.Damage > 0)
                     _opponent.TakeHit(playerAttack);
-                else
-                    ShowWarningText();
                 _player.ResetCharge();
                 break;
             case FightCommand.Defence:
@@ -79,6 +82,12 @@ public class InBattle : BattleState
     }
     private void ShowWarningText()
     {
-        throw new Exception();
+        FirTextAnimationData data = new()
+        {
+            Text = _textWarningConfig.WarningText,
+            LifeLine = _textWarningConfig.WarningTextLifeTime,
+            MaxFontSize = _textWarningConfig.WarningTextFontSize
+        };
+        _screenCenterText.InitializeFirTextAnimation(data);
     }
 }

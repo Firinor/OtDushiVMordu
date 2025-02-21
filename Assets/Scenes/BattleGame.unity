@@ -714,24 +714,23 @@ MonoBehaviour:
   _backgroundColor: {fileID: 95908887}
   _backgroundColorStartTime: 0
   _vs: {fileID: 1925227170}
-  _vsStartTime: 4
+  _vsStartTime: 3
   _playerFighter: {fileID: 2025497484}
   _playerFighterStartTime: 2
   _opponentFighter: {fileID: 238070131}
-  _opponentFighterStartTime: 4
+  _opponentFighterStartTime: 3
   _playerHP: {fileID: 242919417791827695}
-  _playerHPStartTime: 7
+  _playerHPStartTime: 5
   _opponentHP: {fileID: 1071623704}
-  _opponentHPStartTime: 7
+  _opponentHPStartTime: 5
   _playerCharge: {fileID: 719685692}
-  _playerChargeStartTime: 7
+  _playerChargeStartTime: 5
   _opponentCharge: {fileID: 1545182430}
-  _opponentChargeStartTime: 7
+  _opponentChargeStartTime: 5
   _dangerLine: {fileID: 1656890691}
-  _dangerLineStartTime: 7
+  _dangerLineStartTime: 5
   _winPoints: {fileID: 1837247203}
-  _winPointsStartTime: 7
-  timeLimit: 8
+  _winPointsStartTime: 5
 --- !u!1 &510969687
 GameObject:
   m_ObjectHideFlags: 0
@@ -3045,6 +3044,7 @@ MonoBehaviour:
   - {fileID: 1410143467}
   - {fileID: 510969689}
   _winLoseConfig: {fileID: 11400000, guid: 747334c66c0d93c4eb5575e018291a20, type: 2}
+  _statesTimeConfig: {fileID: 11400000, guid: 59f969f92a375924cacbbee9991f7593, type: 2}
   _playerInput: {fileID: 1665754781}
   _dangerLineSystem: {fileID: 726651}
   _animationController: {fileID: 376759606}

@@ -27,9 +27,8 @@ public class WorldMapManager : MonoBehaviour
     {
         PlayerProgress progress = ApplicationContext.Game.PlayerProgress;
         FighterData[] opponents = progress.OpponentsFighters;
-        if (opponents == null)
+        if (!IsCorrect(opponents))
         {
-            progress = ApplicationContext.Game.PlayerProgress;
             opponents = GenerateOpponents();
         }
         
@@ -44,6 +43,20 @@ public class WorldMapManager : MonoBehaviour
             opponentToggle.onValueChanged.AddListener(b => ToBattle(opponents[index]));
             onMapOpponents[i].Initialize();
         }
+    }
+
+    private bool IsCorrect(FighterData[] opponents)
+    {
+        if(opponents is null || opponents.Length <= 0)
+            return false;
+        
+        foreach (FighterData opponent in opponents)
+        {
+            if (opponent == null)
+                return false;
+        }
+
+        return true;
     }
 
     private FighterData[] GenerateOpponents()

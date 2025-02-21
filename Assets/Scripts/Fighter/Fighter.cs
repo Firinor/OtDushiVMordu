@@ -13,6 +13,8 @@ public class Fighter : MonoBehaviour
     private FighterModel _model;
     private Dictionary<FighterState, FighterStateData> _states;
 
+    public Action OnNoEnergy;
+    
     private float timer;
     private bool isTimer;
 
@@ -184,7 +186,6 @@ public class Fighter : MonoBehaviour
     }
     private void ChangeState(FighterState newState)
     {
-        //Debug.Log("STATE : " + newState);
         _model.state = newState;
         FighterImage.sprite = _states[newState].Sprites[0];
 
@@ -197,6 +198,9 @@ public class Fighter : MonoBehaviour
         {
             isTimer = false;
         }
+        
+        if(newState == FighterState.NoEnergy)
+            OnNoEnergy?.Invoke();
     }
 
     public bool TakeHit(AttackData attack)

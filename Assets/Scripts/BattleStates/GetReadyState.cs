@@ -22,15 +22,15 @@ public class GetReadyState : BattleState
     public override void OnEnter()
     {
         PrepareFighters();
-        TextAnimation readyAnimation = _animationTarget.gameObject.AddComponent<TextAnimation>();
-        readyAnimation.textComponent = _animationTarget;
-        _animationTarget.text = _config.GetReadyText;
-        readyAnimation.Curve = _config.GetReadyTextLiveTime;
-        readyAnimation.EndPosition = _config.GetReadyTextFontSize;
-        readyAnimation.Initialize();
-        readyAnimation.OnComplete += DisplayFightText;
-        readyAnimation.OnComplete += () => Object.Destroy(readyAnimation);
-        readyAnimation.enabled = true;
+
+        FirTextAnimationData data = new()
+        {
+            Text = _config.GetReadyText,
+            LifeLine = _config.GetReadyTextLiveTime,
+            MaxFontSize = _config.GetReadyTextFontSize,
+            OnEnd = DisplayFightText
+        };
+        _animationTarget.InitializeFirTextAnimation(data);
         
         new Timer().Start(_timeLimit, () => OnEndState?.Invoke());
     }
@@ -46,16 +46,12 @@ public class GetReadyState : BattleState
 
     private void DisplayFightText()
     {
-        TextAnimation fightAnimation = _animationTarget.gameObject.AddComponent<TextAnimation>();
-        fightAnimation.textComponent = _animationTarget;
-        _animationTarget.text = _config.FightText;
-        fightAnimation.Curve = _config.FightTextLiveTime;
-        fightAnimation.EndPosition = _config.FightTextFontSize;
-        fightAnimation.Initialize();
-        fightAnimation.OnComplete += () =>
+        FirTextAnimationData data = new()
         {
-            Object.Destroy(fightAnimation);
+            Text = _config.FightText,
+            LifeLine = _config.FightTextLiveTime,
+            MaxFontSize = _config.FightTextFontSize
         };
-        fightAnimation.enabled = true;
+        _animationTarget.InitializeFirTextAnimation(data);
     }
 }
