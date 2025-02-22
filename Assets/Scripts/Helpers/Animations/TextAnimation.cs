@@ -22,6 +22,7 @@ namespace FirAnimations
         public void Initialize()
         {
             Stop();
+            OnComplete = null;
             delta = EndPosition - StartPosition;
             _endTime = Curve.keys[Curve.length-1].time;
             ToStartPoint();
@@ -52,6 +53,7 @@ namespace FirAnimations
             if (_time >= _endTime)
             {
                 enabled = false;
+                Debug.Log("TextAnimationOnComplete");
                 OnComplete?.Invoke();
             }
         }

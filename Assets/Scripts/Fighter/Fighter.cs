@@ -86,7 +86,7 @@ public class Fighter : MonoBehaviour
 
         if (isChargeFailed)
         {
-            ToIdleState();
+            ChangeState(FighterState.NoEnergy, isNeedNoEnergySignal:true);
             ResetCharge();   
         }
         
@@ -177,13 +177,14 @@ public class Fighter : MonoBehaviour
             return new AttackData{Damage = _model.data.LightAttackDamage, IsHeavy = false};
         }
 
-        ChangeState(FighterState.NoEnergy);
+        ChangeState(FighterState.NoEnergy, isNeedNoEnergySignal: true);
         return default;
     }
     public void ChangeStateOnEndBattle(bool isWinPose)
     {
         ChangeState(isWinPose ? FighterState.Win : FighterState.Lose);
     }
+
     private void ChangeState(FighterState newState)
     {
         _model.state = newState;
@@ -198,8 +199,13 @@ public class Fighter : MonoBehaviour
         {
             isTimer = false;
         }
+    }
+
+    private void ChangeState(FighterState newState, bool isNeedNoEnergySignal)
+    {
+        ChangeState(newState);
         
-        if(newState == FighterState.NoEnergy)
+        if(isNeedNoEnergySignal && newState == FighterState.NoEnergy)
             OnNoEnergy?.Invoke();
     }
 
@@ -240,7 +246,7 @@ public class Fighter : MonoBehaviour
             return true;
         }
 
-        ChangeState(FighterState.NoEnergy);
+        ChangeState(FighterState.NoEnergy, isNeedNoEnergySignal:true);
         return false;
     }
     public void ToCharge()
@@ -248,7 +254,7 @@ public class Fighter : MonoBehaviour
         if(_model.CurrentEnergyPoints >= _model.data.LightAttackEnergyCost)
             ChangeState(FighterState.Charge);
         else
-            ChangeState(FighterState.NoEnergy);
+            ChangeState(FighterState.NoEnergy, isNeedNoEnergySignal:true);
     }
 
 

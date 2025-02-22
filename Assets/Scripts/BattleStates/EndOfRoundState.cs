@@ -34,15 +34,14 @@ public class EndOfRoundState : BattleState
 
         winer.AddWinPoint();
         
-        TextAnimation endOfRoundAnimation = _text.gameObject.AddComponent<TextAnimation>();
-        endOfRoundAnimation.textComponent = _text;
-        _text.text = winer.WinString;
-        endOfRoundAnimation.Curve = _config.WinerTextLiveTime;
-        endOfRoundAnimation.EndPosition = _config.WinerTextFontSize;
-        endOfRoundAnimation.Initialize();
+        FirTextAnimationData data = new()
+        {
+            Text = winer.WinString,
+            LifeLine = _config.WinerTextLiveTime,
+            MaxFontSize = _config.WinerTextFontSize
+        };
         
-        endOfRoundAnimation.OnComplete += () => Object.Destroy(endOfRoundAnimation);
-        endOfRoundAnimation.enabled = true;
+        _text.PlayFirTextAnimation(data);
         
         new Timer().Start(_manager.StatesTimeConfig.EndOfRoundLifeTime, _manager.NextRound);
     }

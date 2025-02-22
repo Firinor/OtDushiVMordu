@@ -1,7 +1,6 @@
 ﻿using FirAnimations;
 using FirTime;
 using TMPro;
-using Object = UnityEngine.Object;
 
 public class GetReadyState : BattleState
 {
@@ -30,7 +29,7 @@ public class GetReadyState : BattleState
             MaxFontSize = _config.GetReadyTextFontSize,
             OnEnd = DisplayFightText
         };
-        _animationTarget.InitializeFirTextAnimation(data);
+        _animationTarget.PlayFirTextAnimation(data);
         
         new Timer().Start(_timeLimit, () => OnEndState?.Invoke());
     }
@@ -52,6 +51,6 @@ public class GetReadyState : BattleState
             LifeLine = _config.FightTextLiveTime,
             MaxFontSize = _config.FightTextFontSize
         };
-        _animationTarget.InitializeFirTextAnimation(data);
+        _animationTarget.PlayFirTextAnimation(data);
     }
 }

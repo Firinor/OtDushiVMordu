@@ -16,7 +16,7 @@ MonoBehaviour:
   Portrait: {fileID: -605437027, guid: ca0c8015ac7aa594788664613934cc03, type: 3}
   HitPoints: 150
   EnergyPoints: 150
-  EnergyRegen: 1
+  EnergyRegen: 15
   LightAttackDamage: 2
   LightAttackEnergyCost: 15
   HeavyAttackDamage: 25

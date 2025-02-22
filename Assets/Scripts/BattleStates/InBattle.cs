@@ -88,6 +88,6 @@ public class InBattle : BattleState
             LifeLine = _textWarningConfig.WarningTextLifeTime,
             MaxFontSize = _textWarningConfig.WarningTextFontSize
         };
-        _screenCenterText.InitializeFirTextAnimation(data);
+        _screenCenterText.PlayFirTextAnimation(data);
     }
 }
