@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: "\u0411\u043E\u0433\u0430\u0442\u044B\u0440\u044C"
   Portrait: {fileID: 1247022750, guid: 8d7605c0114da0e44bf069aec9f3e46c, type: 3}
-  HitPoints: 10
-  EnergyPoints: 30
-  EnergyRegen: 10
-  LightAttackDamage: 2
-  LightAttackEnergyCost: 10
-  HeavyAttackDamage: 20
-  HeavyAttackEnergyCost: 15
+  HitPoints: 1000
+  EnergyPoints: 100
+  EnergyRegen: 30
+  LightAttackDamage: 50
+  LightAttackEnergyCost: 20
+  HeavyAttackDamage: 400
+  HeavyAttackEnergyCost: 35
   HeavyAttackChargeTime: 1
-  ChargeEnergyCost: 5
-  EvadeEnergyCost: 5
+  ChargeEnergyCost: 10
+  EvadeEnergyCost: 20
   stateData:
   - State: 0
     Sprites:
@@ -36,11 +36,11 @@ MonoBehaviour:
   - State: 4
     Sprites:
     - {fileID: 21300000, guid: c1b82fcced6ff3a49a5ed45d863c6fe9, type: 3}
-    Time: 0.1
+    Time: 0.3
   - State: 3
     Sprites:
     - {fileID: 21300000, guid: 31d494bead7522b408077b5f577e92bc, type: 3}
-    Time: 0.3
+    Time: 0.25
   - State: 1
     Sprites:
     - {fileID: 21300000, guid: d94f0375abba413449e43cf2b9633703, type: 3}
@@ -52,7 +52,7 @@ MonoBehaviour:
   - State: 5
     Sprites:
     - {fileID: 21300000, guid: 6caa9b071713f1143bbdbbfeed2941d9, type: 3}
-    Time: 0.6
+    Time: 1
   - State: 7
     Sprites:
     - {fileID: 21300000, guid: 12a00ac4b00eb054c8ae8765332d6b9f, type: 3}
