@@ -19,9 +19,9 @@ MonoBehaviour:
   EnergyRegen: 30
   LightAttackDamage: 50
   LightAttackEnergyCost: 20
-  HeavyAttackDamage: 400
+  HeavyAttackDamage: 300
   HeavyAttackEnergyCost: 35
-  HeavyAttackChargeTime: 1
+  HeavyAttackChargeTime: 0.5
   ChargeEnergyCost: 10
   EvadeEnergyCost: 20
   stateData:
@@ -61,4 +61,4 @@ MonoBehaviour:
     Sprites:
     - {fileID: 21300000, guid: 1a648cce575982f419a619481f03a828, type: 3}
     Time: 0
-  WinString: 
+  WinString: "\u0420\u0410\u0422\u041D\u0418\u041A \u041F\u041E\u0411\u0415\u0414\u0418\u041B"

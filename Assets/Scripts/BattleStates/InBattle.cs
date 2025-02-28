@@ -45,6 +45,7 @@ public class InBattle : BattleState
     }
     public override void OnExit()
     {  
+        _dangerLineSystem.ClearAll();
         _player.OnNoEnergy -= ShowWarningText;
         _battleManager.StopAllCoroutines();
     }

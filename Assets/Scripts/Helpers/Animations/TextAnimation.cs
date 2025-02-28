@@ -53,7 +53,6 @@ namespace FirAnimations
             if (_time >= _endTime)
             {
                 enabled = false;
-                Debug.Log("TextAnimationOnComplete");
                 OnComplete?.Invoke();
             }
         }

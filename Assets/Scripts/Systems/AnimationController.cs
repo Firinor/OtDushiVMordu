@@ -23,6 +23,8 @@ public class AnimationController : MonoBehaviour
     [SerializeField] private float _playerChargeStartTime;
     [SerializeField] private RectTransformAnimation _opponentCharge;
     [SerializeField] private float _opponentChargeStartTime;
+    [SerializeField] private RectTransformAnimation _exitButton;
+    [SerializeField] private float _exitButtonStartTime;
     [SerializeField] private ColorAnimation _dangerLine;
     [SerializeField] private float _dangerLineStartTime;
     [SerializeField] private RectTransformAnimation _winPoints;
@@ -47,6 +49,7 @@ public class AnimationController : MonoBehaviour
         StartCoroutine(PlayAnimation(_opponentFighter, _opponentFighterStartTime));
         StartCoroutine(PlayAnimation(_opponentHP, _opponentHPStartTime));
         StartCoroutine(PlayAnimation(_opponentCharge, _opponentChargeStartTime));
+        StartCoroutine(PlayAnimation(_exitButton, _exitButtonStartTime));
         StartCoroutine(PlayAnimation(_dangerLine, _dangerLineStartTime));
         StartCoroutine(PlayAnimation(_winPoints, _winPointsStartTime));
         

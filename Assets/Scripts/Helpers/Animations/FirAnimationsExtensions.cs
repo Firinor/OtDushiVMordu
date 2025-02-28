@@ -7,7 +7,6 @@ namespace FirAnimations
     {
         public static void PlayFirTextAnimation(this TextMeshProUGUI textMesh, FirTextAnimationData data)
         {
-            Debug.Log("PlayFirTextAnimation " + data.Text);
             TextAnimation animation = textMesh.gameObject.GetComponent<TextAnimation>();
             if(animation is null) 
                 animation = textMesh.gameObject.AddComponent<TextAnimation>();

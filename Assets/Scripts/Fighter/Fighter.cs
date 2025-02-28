@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Fighter : MonoBehaviour
 {
+    public TextMeshProUGUI NameText;
     public Slider HPSlider;
     public Slider EPSlider;
     public ChargeBar ChargeBar;
@@ -33,7 +35,9 @@ public class Fighter : MonoBehaviour
         gameObject.name = model.data.name;
         
         GenerateStates();
-        
+
+        NameText.text = model.data.Name;
+            
         HPSlider.maxValue = model.data.HitPoints;
         model.OnHPChange += ChangeHP;
         ChangeHP(model.data.HitPoints);

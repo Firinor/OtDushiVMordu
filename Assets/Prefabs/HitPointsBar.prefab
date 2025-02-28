@@ -232,6 +232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3413813287312232383}
   - component: {fileID: 1650628865105427926}
+  - component: {fileID: 8054941439838789499}
   m_Layer: 5
   m_Name: HitPointsBar
   m_TagString: Untagged
@@ -313,6 +314,49 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8054941439838789499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5473077050055807500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0fd95133ad84bceb410ada04985dbc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartPosition:
+    AncoredPosition: {x: 15, y: 200}
+    Scale: {x: 1, y: 1, z: 1}
+  EndPosition:
+    AncoredPosition: {x: 15, y: -15}
+    Scale: {x: 1, y: 1, z: 1}
+  mainComponent: {fileID: 3413813287312232383}
+  Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5873399895969102051
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,8 +601,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0.00005722046, y: -103.700005}
-  m_SizeDelta: {x: 600, y: 40}
+  m_AnchoredPosition: {x: 0.00005722046, y: -80}
+  m_SizeDelta: {x: 600, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &6827663919194752435
 MonoBehaviour:

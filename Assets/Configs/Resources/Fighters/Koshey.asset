@@ -21,7 +21,7 @@ MonoBehaviour:
   LightAttackEnergyCost: 20
   HeavyAttackDamage: 600
   HeavyAttackEnergyCost: 35
-  HeavyAttackChargeTime: 1
+  HeavyAttackChargeTime: 0.5
   ChargeEnergyCost: 10
   EvadeEnergyCost: 20
   stateData:
