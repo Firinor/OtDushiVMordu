@@ -192,7 +192,12 @@ public class Fighter : MonoBehaviour
     private void ChangeState(FighterState newState)
     {
         _model.state = newState;
-        FighterImage.sprite = _states[newState].Sprites[0];
+        
+        int count = _states[newState].Sprites.Length;
+        int index = UnityEngine.Random.Range(0, count);
+        
+        FighterImage.sprite = _states[newState].Sprites[index];
+        FighterImage.SetNativeSize();
 
         if (_states[newState].Time > 0)
         {

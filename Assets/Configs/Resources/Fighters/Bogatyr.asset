@@ -27,31 +27,33 @@ MonoBehaviour:
   stateData:
   - State: 0
     Sprites:
-    - {fileID: -2005087588, guid: 8d7605c0114da0e44bf069aec9f3e46c, type: 3}
+    - {fileID: 21300000, guid: 101c46bc0a00af64ca29c2d83df43f47, type: 3}
     Time: 0
   - State: 2
     Sprites:
-    - {fileID: 21300000, guid: 0b8ec72e586389a458e8ccbd65f5febf, type: 3}
+    - {fileID: 21300000, guid: 7e8bdd9518b133343b21863ced1df373, type: 3}
+    - {fileID: 21300000, guid: 8248a69f5ae5aa14f94e670cabf770e4, type: 3}
+    - {fileID: 21300000, guid: 96776cd4238b8024abadc47f13ad77e6, type: 3}
     Time: 0.3
   - State: 4
     Sprites:
-    - {fileID: 21300000, guid: c1b82fcced6ff3a49a5ed45d863c6fe9, type: 3}
+    - {fileID: 21300000, guid: f490c06a89be9604a81125b3f6987a78, type: 3}
     Time: 0.3
   - State: 3
     Sprites:
-    - {fileID: 21300000, guid: 31d494bead7522b408077b5f577e92bc, type: 3}
+    - {fileID: 21300000, guid: 51ccf62b8ed1f6448b418ea429d75c81, type: 3}
     Time: 0.25
   - State: 1
     Sprites:
-    - {fileID: 21300000, guid: d94f0375abba413449e43cf2b9633703, type: 3}
+    - {fileID: 21300000, guid: 096a3b2128496834398398f1e0ce39cf, type: 3}
     Time: 1
   - State: 6
     Sprites:
-    - {fileID: 21300000, guid: e022a17855c44ce4ba9efc25935b5981, type: 3}
+    - {fileID: 21300000, guid: 822c4f8f39c68aa44b77d848dba16d78, type: 3}
     Time: 0
   - State: 5
     Sprites:
-    - {fileID: 21300000, guid: 6caa9b071713f1143bbdbbfeed2941d9, type: 3}
+    - {fileID: 21300000, guid: 0fe02e0c223e635478e085f2f83c8937, type: 3}
     Time: 1
   - State: 7
     Sprites:

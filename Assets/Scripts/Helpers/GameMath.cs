@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Random = UnityEngine.Random;
 
 namespace FirMath
@@ -24,7 +26,7 @@ namespace FirMath
             List<int> result = new List<int>(new int[NumberOfCardsDrawn]);
             while (NumberOfCardsDrawn > 0)
             {
-                result[NumberOfCardsDrawn - 1] = Random.Range(0, DeckLength);
+                result[NumberOfCardsDrawn - 1] = UnityEngine.Random.Range(0, DeckLength);
                 NumberOfCardsDrawn--;
             }
             if (WithoutDuplicates)

@@ -53,7 +53,7 @@ public class OpponentAI
             }
             
             //float idleTime = Random.Range(0.1f, 3f);
-            float idleTime = 1f;
+            float idleTime = 100f;
             yield return new WaitForSeconds(idleTime);
         }
     }

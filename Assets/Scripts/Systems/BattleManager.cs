@@ -55,7 +55,7 @@ public class BattleManager : MonoBehaviour
     {
         FighterData playerData = ApplicationContext.Game?.PlayerProgress.PlayerFighter;
         FighterData opponentData = ApplicationContext.Game?.NextBattleOpponent;
-
+        
         if (playerData is null)
         {
             playerData = _playerData;
